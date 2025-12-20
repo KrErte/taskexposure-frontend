@@ -16,8 +16,12 @@
 
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+<<<<<<< Updated upstream
 import { Task } from '../../app.component';
 import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
+=======
+import { Task } from '../../shared/models/task.model';
+>>>>>>> Stashed changes
 
 interface ClarifyingQuestion {
   id: number;

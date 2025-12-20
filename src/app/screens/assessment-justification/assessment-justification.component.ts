@@ -16,10 +16,14 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+<<<<<<< Updated upstream
 import {
   ASSESSMENT_JUSTIFICATION_COPY,
   getSignalStrengthExplanation,
 } from '../../shared/content/copy';
+=======
+import { SignalStrength } from '../../shared/models/assessment.model';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-assessment-justification',
@@ -31,7 +35,7 @@ import {
 export class AssessmentJustificationComponent {
   @Input() aiCapabilities: string[] = [];
   @Input() aiLimitations: string[] = [];
-  @Input() signalStrength: 'Low' | 'Moderate' | 'High' = 'Moderate';
+  @Input() signalStrength: SignalStrength = 'moderate';
   @Output() continue = new EventEmitter<void>();
 
   readonly copy = ASSESSMENT_JUSTIFICATION_COPY;
