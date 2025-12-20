@@ -16,8 +16,13 @@
 
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+<<<<<<< Updated upstream
 import { Task, RoadmapAction } from '../../app.component';
 import { SUMMARY_COPY } from '../../shared/content/copy';
+=======
+import { Task } from '../../shared/models/task.model';
+import { RoadmapAction } from '../../shared/models/assessment.model';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-summary',
@@ -82,7 +87,11 @@ export class SummaryComponent {
     if (this.topAction) {
       report += `${this.copy.sections.topAction}:\n`;
       report += `${this.topAction.description}\n`;
+<<<<<<< Updated upstream
       report += `${this.topAction.explanation}\n\n`;
+=======
+      report += `${this.topAction.explanation ?? this.topAction.mechanism}\n`;
+>>>>>>> Stashed changes
     }
 
     report += `${this.copy.nextSteps}\n`;
