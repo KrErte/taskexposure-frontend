@@ -17,6 +17,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task, RoadmapAction } from '../../app.component';
+import { SUMMARY_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-summary',
@@ -29,6 +30,8 @@ export class SummaryComponent {
   @Input() riskScore: number = 0;
   @Input() tasks: Task[] = [];
   @Input() topAction: RoadmapAction | undefined;
+
+  readonly copy = SUMMARY_COPY;
 
   get scoreColorClass(): string {
     if (this.riskScore <= 30) return 'summary__score--low';
@@ -45,7 +48,6 @@ export class SummaryComponent {
   }
 
   downloadReport(): void {
-    // Mock implementation - in production this would generate a PDF
     const reportContent = this.generateReportText();
     const blob = new Blob([reportContent], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
@@ -59,25 +61,31 @@ export class SummaryComponent {
   private generateReportText(): string {
     let report = 'TASKEXPOSURE Assessment Report\n';
     report += '================================\n\n';
-    report += `Risk Score: ${this.riskScore}%\n\n`;
+    report += `${this.copy.sections.score}: ${this.riskScore}%\n\n`;
 
-    report += 'Highest Exposure Tasks:\n';
-    this.highExposureTasks.forEach((t) => {
-      report += `- ${t.description}\n`;
-    });
-    report += '\n';
+    if (this.highExposureTasks.length > 0) {
+      report += `${this.copy.sections.highExposure}:\n`;
+      this.highExposureTasks.forEach((t) => {
+        report += `- ${t.description}\n`;
+      });
+      report += '\n';
+    }
 
-    report += 'Lowest Exposure Tasks:\n';
-    this.lowExposureTasks.forEach((t) => {
-      report += `- ${t.description}\n`;
-    });
-    report += '\n';
+    if (this.lowExposureTasks.length > 0) {
+      report += `${this.copy.sections.lowExposure}:\n`;
+      this.lowExposureTasks.forEach((t) => {
+        report += `- ${t.description}\n`;
+      });
+      report += '\n';
+    }
 
     if (this.topAction) {
-      report += 'Top Recommended Action:\n';
+      report += `${this.copy.sections.topAction}:\n`;
       report += `${this.topAction.description}\n`;
-      report += `${this.topAction.explanation}\n`;
+      report += `${this.topAction.explanation}\n\n`;
     }
+
+    report += `${this.copy.nextSteps}\n`;
 
     return report;
   }

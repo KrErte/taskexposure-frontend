@@ -16,6 +16,11 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  RISK_SCORE_COPY,
+  getExposureBand,
+  getScoreMeaning,
+} from '../../shared/content/copy';
 
 @Component({
   selector: 'app-risk-score',
@@ -28,10 +33,22 @@ export class RiskScoreComponent {
   @Input() score: number = 0;
   @Output() continue = new EventEmitter<void>();
 
+  readonly copy = RISK_SCORE_COPY;
+
   get scoreColorClass(): string {
-    if (this.score <= 30) return 'risk-score__percentage--low';
-    if (this.score <= 60) return 'risk-score__percentage--medium';
+    const band = getExposureBand(this.score);
+    if (band === 'low') return 'risk-score__percentage--low';
+    if (band === 'moderate') return 'risk-score__percentage--medium';
     return 'risk-score__percentage--high';
+  }
+
+  get bandColorClass(): string {
+    const band = getExposureBand(this.score);
+    return `risk-score__band--${band}`;
+  }
+
+  get scoreMeaning(): { label: string; meaning: string; action: string } {
+    return getScoreMeaning(this.score);
   }
 
   onContinue(): void {

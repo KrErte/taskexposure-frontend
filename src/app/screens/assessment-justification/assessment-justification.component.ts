@@ -16,6 +16,10 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  ASSESSMENT_JUSTIFICATION_COPY,
+  getSignalStrengthExplanation,
+} from '../../shared/content/copy';
 
 @Component({
   selector: 'app-assessment-justification',
@@ -29,6 +33,18 @@ export class AssessmentJustificationComponent {
   @Input() aiLimitations: string[] = [];
   @Input() signalStrength: 'Low' | 'Moderate' | 'High' = 'Moderate';
   @Output() continue = new EventEmitter<void>();
+
+  readonly copy = ASSESSMENT_JUSTIFICATION_COPY;
+
+  isSignalInfoExpanded = false;
+
+  get signalStrengthExplanation(): string {
+    return getSignalStrengthExplanation(this.signalStrength);
+  }
+
+  toggleSignalInfo(): void {
+    this.isSignalInfoExpanded = !this.isSignalInfoExpanded;
+  }
 
   onContinue(): void {
     this.continue.emit();

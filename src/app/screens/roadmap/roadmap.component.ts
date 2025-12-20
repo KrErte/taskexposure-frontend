@@ -17,6 +17,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoadmapAction } from '../../app.component';
+import { ROADMAP_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-roadmap',
@@ -28,6 +29,8 @@ import { RoadmapAction } from '../../app.component';
 export class RoadmapComponent {
   @Input() actions: RoadmapAction[] = [];
   @Output() continue = new EventEmitter<void>();
+
+  readonly copy = ROADMAP_COPY;
 
   onContinue(): void {
     this.continue.emit();

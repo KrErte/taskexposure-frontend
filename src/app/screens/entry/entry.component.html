@@ -15,27 +15,25 @@ limitations under the License.
 -->
 
 <div class="entry">
-  <h1 class="entry__headline">How exposed is your job to AI?</h1>
+  <h1 class="entry__headline">{{ copy.headline }}</h1>
 
-  <p class="entry__copy">
-    This tool analyzes what you actually do at work — not your title, not your years of experience
-    — and identifies which parts of your role AI systems can already perform or are likely to
-    perform within the next 2–5 years.
-  </p>
+  <p class="entry__copy">{{ copy.subheadline }}</p>
+
+  <p class="entry__body" *ngFor="let paragraph of copy.body">{{ paragraph }}</p>
 
   <p class="entry__meta">
-    Takes approximately 20 minutes.<br />
-    Requires honest, specific input.
+    {{ copy.timeEstimate }}<br />
+    {{ copy.requirements }}
   </p>
 
   <div class="entry__receive">
-    <p class="entry__receive-label">You will receive:</p>
+    <p class="entry__receive-label">What you will receive:</p>
     <ul class="entry__receive-list">
-      <li>A task exposure percentage</li>
-      <li>An explanation of where that number comes from</li>
-      <li>Concrete actions that reduce exposure</li>
+      <li *ngFor="let item of copy.deliverables">{{ item }}</li>
     </ul>
   </div>
 
-  <button type="button" class="entry__cta" (click)="onBegin()">Begin assessment</button>
+  <button type="button" class="entry__cta" (click)="onBegin()">
+    {{ copy.cta.primary }}
+  </button>
 </div>

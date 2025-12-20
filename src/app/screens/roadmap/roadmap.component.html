@@ -15,15 +15,23 @@ limitations under the License.
 -->
 
 <div class="roadmap">
-  <h1 class="roadmap__headline">Actions that reduce your exposure.</h1>
+  <h1 class="roadmap__headline">{{ copy.headline }}</h1>
+
+  <p class="roadmap__subheadline">{{ copy.subheadline }}</p>
 
   <div class="roadmap__actions">
     <div class="roadmap__action" *ngFor="let action of actions; let i = index">
-      <h2 class="roadmap__action-title">{{ i + 1 }}. {{ action.description }}</h2>
+      <p class="roadmap__action-number">{{ copy.actionPrefix }} {{ i + 1 }}</p>
+      <h2 class="roadmap__action-title">{{ action.description }}</h2>
       <p class="roadmap__action-explanation">{{ action.explanation }}</p>
-      <p class="roadmap__action-impact">{{ action.impact }}</p>
+      <p class="roadmap__action-impact">
+        <span class="roadmap__action-impact-label">{{ copy.impactLabel }}:</span>
+        {{ action.impact }}
+      </p>
     </div>
   </div>
 
-  <button type="button" class="roadmap__cta" (click)="onContinue()">View summary</button>
+  <button type="button" class="roadmap__cta" (click)="onContinue()">
+    {{ copy.cta.primary }}
+  </button>
 </div>

@@ -17,6 +17,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../app.component';
+import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-risk-breakdown',
@@ -29,12 +30,18 @@ export class RiskBreakdownComponent {
   @Input() tasks: Task[] = [];
   @Output() continue = new EventEmitter<void>();
 
+  readonly copy = RISK_BREAKDOWN_COPY;
+
   getExposureClass(exposure: string): string {
     return `risk-breakdown__task--${exposure}`;
   }
 
   getExposureLabelClass(exposure: string): string {
     return `risk-breakdown__exposure-label--${exposure}`;
+  }
+
+  getExposureLabel(exposure: 'high' | 'medium' | 'low'): string {
+    return this.copy.exposureLabels[exposure];
   }
 
   onContinue(): void {
