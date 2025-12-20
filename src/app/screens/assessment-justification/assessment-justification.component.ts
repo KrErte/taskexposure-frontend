@@ -16,14 +16,11 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< Updated upstream
 import {
   ASSESSMENT_JUSTIFICATION_COPY,
   getSignalStrengthExplanation,
 } from '../../shared/content/copy';
-=======
-import { SignalStrength } from '../../shared/models/assessment.model';
->>>>>>> Stashed changes
+import { SignalStrength } from '../../shared/models/signal-strength.model';
 
 @Component({
   selector: 'app-assessment-justification',

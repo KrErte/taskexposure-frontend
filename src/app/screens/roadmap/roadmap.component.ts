@@ -16,12 +16,8 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< Updated upstream
-import { RoadmapAction } from '../../app.component';
+import { RoadmapAction } from '../../shared/models/roadmap-action.model';
 import { ROADMAP_COPY } from '../../shared/content/copy';
-=======
-import { RoadmapAction } from '../../shared/models/assessment.model';
->>>>>>> Stashed changes
 
 @Component({
   selector: 'app-roadmap',
