@@ -16,6 +16,7 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { INPUT_METHOD_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-input-method',
@@ -26,6 +27,8 @@ import { CommonModule } from '@angular/common';
 })
 export class InputMethodComponent {
   @Output() selectManual = new EventEmitter<void>();
+
+  readonly copy = INPUT_METHOD_COPY;
 
   onSelectManual(): void {
     this.selectManual.emit();

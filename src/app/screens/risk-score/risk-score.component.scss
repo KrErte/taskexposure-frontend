@@ -15,17 +15,19 @@ limitations under the License.
 */
 
 .risk-score {
-  &__headline {
-    font-size: 2.25rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin: 0 0 2.5rem 0;
-    color: #1a1a1a;
+  &__score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0 0 2rem 0;
   }
 
   &__percentage {
+    font-size: 4rem;
     font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
     font-weight: 600;
+    line-height: 1;
 
     &--low {
       color: #6b7c6b;
@@ -40,19 +42,65 @@ limitations under the License.
     }
   }
 
-  &__copy {
-    font-size: 1.125rem;
-    line-height: 1.7;
-    margin: 0 0 1.5rem 0;
+  &__band {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--low {
+      color: #6b7c6b;
+      background-color: rgba(107, 124, 107, 0.1);
+    }
+
+    &--moderate {
+      color: #b8860b;
+      background-color: rgba(184, 134, 11, 0.1);
+    }
+
+    &--high {
+      color: #8b2942;
+      background-color: rgba(139, 41, 66, 0.1);
+    }
+  }
+
+  &__headline {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 2rem 0;
     color: #1a1a1a;
   }
 
-  &__disclaimer {
+  &__meaning {
+    margin: 0 0 2rem 0;
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-left: 3px solid #cbd5e1;
+  }
+
+  &__meaning-text {
     font-size: 1rem;
     line-height: 1.6;
+    margin: 0 0 1rem 0;
+    color: #1a1a1a;
+  }
+
+  &__meaning-action {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  &__disclaimer {
+    font-size: 0.875rem;
+    line-height: 1.6;
     margin: 0 0 3rem 0;
-    color: #4a4a4a;
-    font-style: italic;
+    color: #6b7280;
   }
 
   &__cta {

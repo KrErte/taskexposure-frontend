@@ -15,24 +15,25 @@ limitations under the License.
 -->
 
 <div class="manual-input">
-  <h1 class="manual-input__headline">What do you actually do at work?</h1>
+  <h1 class="manual-input__headline">{{ copy.headline }}</h1>
+
+  <p class="manual-input__subheadline">{{ copy.subheadline }}</p>
 
   <div class="manual-input__instructions">
-    <p>Forget your job title.</p>
-    <p>Describe the activities that fill your week.</p>
+    <p *ngFor="let instruction of copy.instructions">{{ instruction }}</p>
   </div>
 
-  <p class="manual-input__hint">
-    Be specific.<br />
-    "Write code" is less useful than<br />
-    "Debug authentication issues in legacy systems."
-  </p>
+  <div class="manual-input__example">
+    <p class="manual-input__example-bad">{{ copy.example.bad }}</p>
+    <p class="manual-input__example-arrow">becomes</p>
+    <p class="manual-input__example-good">{{ copy.example.good }}</p>
+  </div>
 
   <div class="manual-input__task-list" *ngIf="tasks.length > 0">
     <div class="manual-input__task" *ngFor="let task of tasks; let i = index">
       <span class="manual-input__task-text">{{ task }}</span>
       <button type="button" class="manual-input__task-remove" (click)="removeTask(i)">
-        Remove
+        {{ copy.labels?.['remove'] }}
       </button>
     </div>
   </div>
@@ -41,7 +42,7 @@ limitations under the License.
     <textarea
       class="manual-input__textarea"
       [(ngModel)]="currentTask"
-      placeholder="Describe a task..."
+      [placeholder]="copy.placeholder"
       rows="3"
     ></textarea>
     <button
@@ -50,11 +51,11 @@ limitations under the License.
       [disabled]="!canAddTask"
       (click)="addTask()"
     >
-      Add task
+      {{ copy.labels?.['addTask'] }}
     </button>
   </div>
 
-  <p class="manual-input__counter">{{ tasks.length }} of 3–5 tasks entered</p>
+  <p class="manual-input__counter">{{ taskCounter }}</p>
 
   <button
     type="button"
@@ -62,6 +63,6 @@ limitations under the License.
     [disabled]="!canContinue"
     (click)="onContinue()"
   >
-    Continue
+    {{ copy.cta.primary }}
   </button>
 </div>

@@ -17,6 +17,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../app.component';
+import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
 
 interface ClarifyingQuestion {
   id: number;
@@ -36,6 +37,8 @@ export class ClarifyingQuestionsComponent implements OnInit {
   @Input() tasks: Task[] = [];
   @Output() complete = new EventEmitter<Map<number, number>>();
 
+  readonly copy = CLARIFYING_QUESTIONS_COPY;
+
   questions: ClarifyingQuestion[] = [];
   currentQuestionIndex: number = 0;
   answers: Map<number, number> = new Map();
@@ -50,6 +53,19 @@ export class ClarifyingQuestionsComponent implements OnInit {
 
   get isLastQuestion(): boolean {
     return this.currentQuestionIndex === this.questions.length - 1;
+  }
+
+  get progressLabel(): string {
+    if (this.copy.progressLabel) {
+      return this.copy.progressLabel(this.currentQuestionIndex + 1, this.questions.length);
+    }
+    return '';
+  }
+
+  get ctaLabel(): string {
+    return this.isLastQuestion
+      ? (this.copy.labels?.['finish'] || this.copy.cta.primary)
+      : (this.copy.labels?.['next'] || 'Next');
   }
 
   ngOnInit(): void {

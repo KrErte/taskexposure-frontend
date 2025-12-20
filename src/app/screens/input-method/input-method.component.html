@@ -15,17 +15,20 @@ limitations under the License.
 -->
 
 <div class="input-method">
-  <h1 class="input-method__headline">How should we analyze your work?</h1>
+  <h1 class="input-method__headline">{{ copy.headline }}</h1>
+
+  <p class="input-method__subheadline" *ngFor="let paragraph of copy.body">{{ paragraph }}</p>
 
   <div class="input-method__options">
     <div class="input-method__option input-method__option--disabled">
-      <h2 class="input-method__option-title">Upload CV</h2>
-      <p class="input-method__option-desc">Faster, requires cleanup — not implemented in v1</p>
+      <h2 class="input-method__option-title">{{ copy.options.cv.title }}</h2>
+      <p class="input-method__option-desc">{{ copy.options.cv.description }}</p>
+      <span class="input-method__option-badge">{{ copy.options.cv.disabled }}</span>
     </div>
 
     <div class="input-method__option input-method__option--active" (click)="onSelectManual()">
-      <h2 class="input-method__option-title">Describe manually</h2>
-      <p class="input-method__option-desc">More accurate. Takes longer.</p>
+      <h2 class="input-method__option-title">{{ copy.options.manual.title }}</h2>
+      <p class="input-method__option-desc">{{ copy.options.manual.description }}</p>
     </div>
   </div>
 </div>

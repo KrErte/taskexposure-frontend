@@ -17,6 +17,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MANUAL_INPUT_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-manual-input',
@@ -28,6 +29,8 @@ import { FormsModule } from '@angular/forms';
 export class ManualInputComponent {
   @Output() tasksSubmitted = new EventEmitter<string[]>();
 
+  readonly copy = MANUAL_INPUT_COPY;
+
   tasks: string[] = [];
   currentTask: string = '';
 
@@ -37,6 +40,10 @@ export class ManualInputComponent {
 
   get canContinue(): boolean {
     return this.tasks.length >= 3;
+  }
+
+  get taskCounter(): string {
+    return this.copy.counter(this.tasks.length, 3, 5);
   }
 
   addTask(): void {

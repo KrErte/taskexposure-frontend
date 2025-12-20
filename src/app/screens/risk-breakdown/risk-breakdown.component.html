@@ -15,7 +15,9 @@ limitations under the License.
 -->
 
 <div class="risk-breakdown">
-  <h1 class="risk-breakdown__headline">Where your exposure comes from.</h1>
+  <h1 class="risk-breakdown__headline">{{ copy.headline }}</h1>
+
+  <p class="risk-breakdown__subheadline">{{ copy.subheadline }}</p>
 
   <div class="risk-breakdown__tasks">
     <div
@@ -29,7 +31,7 @@ limitations under the License.
           class="risk-breakdown__exposure-label"
           [ngClass]="getExposureLabelClass(task.exposure)"
         >
-          {{ task.exposure | titlecase }}
+          {{ getExposureLabel(task.exposure) }}
         </span>
       </div>
       <p class="risk-breakdown__task-reason">{{ task.reason }}</p>
@@ -37,6 +39,6 @@ limitations under the License.
   </div>
 
   <button type="button" class="risk-breakdown__cta" (click)="onContinue()">
-    See recommended actions
+    {{ copy.cta.primary }}
   </button>
 </div>
