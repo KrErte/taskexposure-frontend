@@ -1,0 +1,102 @@
+/*
+Copyright 2025 TASKEXPOSURE
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.clarifying-questions {
+  &__headline {
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 1.5rem 0;
+    color: #1a1a1a;
+  }
+
+  &__copy {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin: 0 0 3rem 0;
+    color: #4a4a4a;
+  }
+
+  &__question {
+    margin: 0 0 3rem 0;
+  }
+
+  &__context {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    color: #4a4a4a;
+  }
+
+  &__question-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+    color: #1a1a1a;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f8fafc;
+    }
+
+    input[type='radio'] {
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+    }
+  }
+
+  &__option-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1a1a1a;
+  }
+
+  &__cta {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #475569;
+    border: none;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background-color: #334155;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

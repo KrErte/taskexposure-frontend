@@ -1,0 +1,42 @@
+<!--
+Copyright 2025 TASKEXPOSURE
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="risk-breakdown">
+  <h1 class="risk-breakdown__headline">Where your exposure comes from.</h1>
+
+  <div class="risk-breakdown__tasks">
+    <div
+      class="risk-breakdown__task"
+      [ngClass]="getExposureClass(task.exposure)"
+      *ngFor="let task of tasks"
+    >
+      <div class="risk-breakdown__task-header">
+        <span class="risk-breakdown__task-description">{{ task.description }}</span>
+        <span
+          class="risk-breakdown__exposure-label"
+          [ngClass]="getExposureLabelClass(task.exposure)"
+        >
+          {{ task.exposure | titlecase }}
+        </span>
+      </div>
+      <p class="risk-breakdown__task-reason">{{ task.reason }}</p>
+    </div>
+  </div>
+
+  <button type="button" class="risk-breakdown__cta" (click)="onContinue()">
+    See recommended actions
+  </button>
+</div>
