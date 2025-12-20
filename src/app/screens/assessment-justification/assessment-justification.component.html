@@ -15,33 +15,67 @@ limitations under the License.
 -->
 
 <div class="assessment-justification">
-  <h1 class="assessment-justification__headline">Here's what we found.</h1>
+  <h1 class="assessment-justification__headline">{{ copy.headline }}</h1>
+
+  <p class="assessment-justification__subheadline">{{ copy.subheadline }}</p>
 
   <section class="assessment-justification__section">
-    <h2 class="assessment-justification__section-title">What AI already does well</h2>
+    <h2 class="assessment-justification__section-title">
+      {{ copy.sections.capabilities.title }}
+    </h2>
+    <p class="assessment-justification__section-desc">
+      {{ copy.sections.capabilities.description }}
+    </p>
     <ul class="assessment-justification__list">
       <li *ngFor="let capability of aiCapabilities">{{ capability }}</li>
     </ul>
   </section>
 
   <section class="assessment-justification__section">
-    <h2 class="assessment-justification__section-title">What AI struggles with</h2>
+    <h2 class="assessment-justification__section-title">
+      {{ copy.sections.limitations.title }}
+    </h2>
+    <p class="assessment-justification__section-desc">
+      {{ copy.sections.limitations.description }}
+    </p>
     <ul class="assessment-justification__list">
       <li *ngFor="let limitation of aiLimitations">{{ limitation }}</li>
     </ul>
   </section>
 
-  <section class="assessment-justification__section">
-    <h2 class="assessment-justification__section-title">Signal strength</h2>
+  <section class="assessment-justification__section assessment-justification__section--signal">
+    <h2 class="assessment-justification__section-title">
+      {{ copy.sections.signalStrength.title }}
+    </h2>
     <p class="assessment-justification__signal">
-      Signal strength: <strong>{{ signalStrength }}</strong>
+      {{ copy.sections.signalStrength.label }}: <strong>{{ signalStrength }}</strong>
     </p>
     <p class="assessment-justification__signal-explanation">
-      Based on the specificity and completeness of your input.
+      {{ signalStrengthExplanation }}
     </p>
+
+    <button
+      type="button"
+      class="assessment-justification__learn-more-toggle"
+      (click)="toggleSignalInfo()"
+    >
+      {{ copy.sections.signalStrength.learnMore.title }}
+      <span class="assessment-justification__toggle-indicator">
+        {{ isSignalInfoExpanded ? '−' : '+' }}
+      </span>
+    </button>
+
+    <div
+      class="assessment-justification__learn-more-content"
+      *ngIf="isSignalInfoExpanded"
+    >
+      <p *ngFor="let paragraph of copy.sections.signalStrength.learnMore.content">
+        {{ paragraph }}
+      </p>
+    </div>
   </section>
 
   <button type="button" class="assessment-justification__cta" (click)="onContinue()">
-    See your score
+    {{ copy.cta.primary }}
   </button>
 </div>

@@ -19,26 +19,55 @@ limitations under the License.
     font-size: 2.25rem;
     font-weight: 600;
     line-height: 1.2;
-    margin: 0 0 2rem 0;
+    margin: 0 0 0.75rem 0;
     color: #1a1a1a;
+  }
+
+  &__subheadline {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+    color: #4a4a4a;
   }
 
   &__instructions {
     margin: 0 0 1.5rem 0;
 
     p {
-      font-size: 1.125rem;
+      font-size: 1rem;
       line-height: 1.6;
-      margin: 0;
+      margin: 0 0 0.25rem 0;
       color: #1a1a1a;
     }
   }
 
-  &__hint {
-    font-size: 1rem;
-    line-height: 1.6;
+  &__example {
     margin: 0 0 2rem 0;
-    color: #4a4a4a;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-left: 3px solid #cbd5e1;
+  }
+
+  &__example-bad {
+    font-size: 0.9375rem;
+    margin: 0 0 0.5rem 0;
+    color: #6b7280;
+    text-decoration: line-through;
+  }
+
+  &__example-arrow {
+    font-size: 0.75rem;
+    margin: 0 0 0.5rem 0;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__example-good {
+    font-size: 0.9375rem;
+    margin: 0;
+    color: #1a1a1a;
+    font-weight: 500;
   }
 
   &__task-list {

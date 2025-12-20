@@ -16,6 +16,7 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ENTRY_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-entry',
@@ -26,6 +27,8 @@ import { CommonModule } from '@angular/common';
 })
 export class EntryComponent {
   @Output() begin = new EventEmitter<void>();
+
+  readonly copy = ENTRY_COPY;
 
   onBegin(): void {
     this.begin.emit();

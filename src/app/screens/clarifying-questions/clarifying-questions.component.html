@@ -15,14 +15,12 @@ limitations under the License.
 -->
 
 <div class="clarifying-questions">
-  <h1 class="clarifying-questions__headline">A few clarifications.</h1>
+  <h1 class="clarifying-questions__headline">{{ copy.headline }}</h1>
 
-  <p class="clarifying-questions__copy">
-    These questions help distinguish between tasks that appear similar but have very different
-    exposure profiles.
-  </p>
+  <p class="clarifying-questions__copy">{{ copy.subheadline }}</p>
 
   <div class="clarifying-questions__question" *ngIf="currentQuestion">
+    <p class="clarifying-questions__progress">{{ progressLabel }}</p>
     <p class="clarifying-questions__context">{{ currentQuestion.context }}</p>
     <p class="clarifying-questions__question-text">{{ currentQuestion.question }}</p>
 
@@ -48,6 +46,6 @@ limitations under the License.
     [disabled]="!hasSelectedAnswer"
     (click)="nextQuestion()"
   >
-    {{ isLastQuestion ? 'Continue' : 'Next question' }}
+    {{ ctaLabel }}
   </button>
 </div>
