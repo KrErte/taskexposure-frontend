@@ -1,0 +1,31 @@
+<!--
+Copyright 2025 TASKEXPOSURE
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="input-method">
+  <h1 class="input-method__headline">How should we analyze your work?</h1>
+
+  <div class="input-method__options">
+    <div class="input-method__option input-method__option--disabled">
+      <h2 class="input-method__option-title">Upload CV</h2>
+      <p class="input-method__option-desc">Faster, requires cleanup — not implemented in v1</p>
+    </div>
+
+    <div class="input-method__option input-method__option--active" (click)="onSelectManual()">
+      <h2 class="input-method__option-title">Describe manually</h2>
+      <p class="input-method__option-desc">More accurate. Takes longer.</p>
+    </div>
+  </div>
+</div>

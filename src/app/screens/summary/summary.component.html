@@ -1,0 +1,49 @@
+<!--
+Copyright 2025 TASKEXPOSURE
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="summary">
+  <h1 class="summary__headline">Your assessment is complete.</h1>
+
+  <div class="summary__section">
+    <h2 class="summary__section-title">Risk score</h2>
+    <p class="summary__score" [ngClass]="scoreColorClass">{{ riskScore }}%</p>
+  </div>
+
+  <div class="summary__section" *ngIf="highExposureTasks.length > 0">
+    <h2 class="summary__section-title">Highest exposure tasks</h2>
+    <ul class="summary__list">
+      <li *ngFor="let task of highExposureTasks">{{ task.description }}</li>
+    </ul>
+  </div>
+
+  <div class="summary__section" *ngIf="lowExposureTasks.length > 0">
+    <h2 class="summary__section-title">Lowest exposure tasks</h2>
+    <ul class="summary__list">
+      <li *ngFor="let task of lowExposureTasks">{{ task.description }}</li>
+    </ul>
+  </div>
+
+  <div class="summary__section" *ngIf="topAction">
+    <h2 class="summary__section-title">Top recommended action</h2>
+    <p class="summary__action">{{ topAction.description }}</p>
+  </div>
+
+  <div class="summary__options">
+    <button type="button" class="summary__download" (click)="downloadReport()">
+      Download full report
+    </button>
+  </div>
+</div>
