@@ -19,8 +19,15 @@ limitations under the License.
     font-size: 2.25rem;
     font-weight: 600;
     line-height: 1.2;
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 0.75rem 0;
     color: #1a1a1a;
+  }
+
+  &__subheadline {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 2.5rem 0;
+    color: #4a4a4a;
   }
 
   &__tasks {

@@ -15,20 +15,21 @@ limitations under the License.
 -->
 
 <div class="risk-score">
-  <h1 class="risk-score__headline">
-    Your current role carries
+  <div class="risk-score__score-display">
     <span class="risk-score__percentage" [ngClass]="scoreColorClass">{{ score }}%</span>
-    AI exposure.
-  </h1>
+    <span class="risk-score__band" [ngClass]="bandColorClass">{{ scoreMeaning.label }}</span>
+  </div>
 
-  <p class="risk-score__copy">
-    This percentage represents the share of your weekly responsibilities that overlap with tasks AI
-    systems can perform now or are likely to perform competently within the next 2–5 years.
-  </p>
+  <h1 class="risk-score__headline">{{ copy.headline }}</h1>
 
-  <p class="risk-score__disclaimer">
-    This is a task exposure score — not a prediction of job loss.
-  </p>
+  <div class="risk-score__meaning">
+    <p class="risk-score__meaning-text">{{ scoreMeaning.meaning }}</p>
+    <p class="risk-score__meaning-action">{{ scoreMeaning.action }}</p>
+  </div>
 
-  <button type="button" class="risk-score__cta" (click)="onContinue()">See breakdown</button>
+  <p class="risk-score__disclaimer">{{ copy.disclaimer }}</p>
+
+  <button type="button" class="risk-score__cta" (click)="onContinue()">
+    {{ copy.cta.primary }}
+  </button>
 </div>
