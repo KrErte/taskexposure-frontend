@@ -38,6 +38,9 @@ import {
   ClarifyingQuestion as ApiClarifyingQuestion,
 } from './core/models/risk-api.models';
 import { SkeletonLoaderComponent } from './shared/components/skeleton-loader/skeleton-loader.component';
+import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
+import { EmptyStateComponent } from './shared/components/empty-state/empty-state.component';
+import { ToastService } from './core/services/toast.service';
 
 type ScreenId =
   | 'entry'
@@ -61,6 +64,8 @@ type ScreenId =
 
     // Shared components
     SkeletonLoaderComponent,
+    ToastContainerComponent,
+    EmptyStateComponent,
 
     // Screens used in app.component.html
     EntryComponent,
@@ -78,6 +83,7 @@ type ScreenId =
 })
 export class AppComponent {
   private readonly riskApi = inject(RiskApiService);
+  private readonly toast = inject(ToastService);
 
   // app.component.html uses this to switch sections
   currentScreen: ScreenId = 'entry';
@@ -139,7 +145,7 @@ export class AppComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = 'Failed to analyze tasks. Please try again.';
+        this.toast.warning('Using demo mode - API unavailable');
         console.error('Analyze error:', error);
         // Fallback to mock data
         this.useFallbackForAnalysis(tasks);
