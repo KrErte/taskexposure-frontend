@@ -24,6 +24,8 @@ import {
   RefineRequest,
   RefineResponse,
   RiskSummaryResponse,
+  QuestionsResponse,
+  ReEvaluateRequest,
   RiskFlowStartRequest,
   RiskFlowStartResponse,
   RiskFlowNextRequest,
@@ -67,6 +69,22 @@ export class RiskApiService {
       params['sessionId'] = sessionId;
     }
     return this.http.get<RiskSummaryResponse>(`${this.baseUrl}/summary`, { params });
+  }
+
+  /**
+   * Get public assessment questions.
+   * GET /api/risk/questions
+   */
+  getQuestions(): Observable<QuestionsResponse> {
+    return this.http.get<QuestionsResponse>(`${this.baseUrl}/questions`);
+  }
+
+  /**
+   * Re-evaluate risk for a training session.
+   * POST /api/risk/re-evaluate
+   */
+  reEvaluate(request: ReEvaluateRequest): Observable<RiskSummaryResponse> {
+    return this.http.post<RiskSummaryResponse>(`${this.baseUrl}/re-evaluate`, request);
   }
 
   // ============================================

@@ -152,6 +152,32 @@ export interface RiskFlowEvaluateResponse {
 
 export interface RiskSummaryResponse {
   riskScore: number;
+  band: string;
+  message: string;
   confidence: string;
   missingSignals: string[];
+}
+
+// ============================================
+// Questions Endpoint DTOs
+// ============================================
+
+export interface Question {
+  id: string;
+  question: string;
+  hint?: string;
+}
+
+export interface QuestionsResponse {
+  questions: Question[];
+}
+
+// ============================================
+// Re-evaluate Endpoint DTOs
+// ============================================
+
+export interface ReEvaluateRequest {
+  email: string;
+  taskKey: string;
+  sessionId?: string;
 }
