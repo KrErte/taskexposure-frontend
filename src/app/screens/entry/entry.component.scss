@@ -20,21 +20,21 @@ limitations under the License.
     font-weight: 600;
     line-height: 1.2;
     margin: 0 0 2rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__copy {
     font-size: 1.125rem;
     line-height: 1.7;
     margin: 0 0 1.5rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__meta {
     font-size: 1rem;
     line-height: 1.6;
     margin: 0 0 2rem 0;
-    color: #4a4a4a;
+    color: var(--color-text-secondary);
   }
 
   &__receive {
@@ -44,7 +44,7 @@ limitations under the License.
   &__receive-label {
     font-size: 1rem;
     margin: 0 0 0.75rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__receive-list {
@@ -52,7 +52,7 @@ limitations under the License.
     padding-left: 1.25rem;
     font-size: 1rem;
     line-height: 1.8;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__cta {
@@ -61,12 +61,12 @@ limitations under the License.
     font-size: 1rem;
     font-weight: 500;
     color: #ffffff;
-    background-color: #475569;
+    background-color: var(--color-accent);
     border: none;
     cursor: pointer;
 
     &:hover {
-      background-color: #334155;
+      background-color: var(--color-accent-hover);
     }
   }
 }

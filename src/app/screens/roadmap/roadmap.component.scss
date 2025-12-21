@@ -20,14 +20,14 @@ limitations under the License.
     font-weight: 600;
     line-height: 1.2;
     margin: 0 0 0.75rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__subheadline {
     font-size: 1.125rem;
     line-height: 1.6;
     margin: 0 0 2.5rem 0;
-    color: #4a4a4a;
+    color: var(--color-text-secondary);
   }
 
   &__actions {
@@ -39,8 +39,8 @@ limitations under the License.
 
   &__action {
     padding: 1.5rem;
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
   }
 
   &__action-number {
@@ -49,34 +49,34 @@ limitations under the License.
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin: 0 0 0.5rem 0;
-    color: #475569;
+    color: var(--color-accent);
   }
 
   &__action-title {
     font-size: 1.125rem;
     font-weight: 500;
     margin: 0 0 0.75rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__action-explanation {
     font-size: 1rem;
     line-height: 1.6;
     margin: 0 0 1rem 0;
-    color: #4a4a4a;
+    color: var(--color-text-secondary);
   }
 
   &__action-impact {
     font-size: 0.875rem;
     margin: 0;
     padding: 0.75rem;
-    background-color: rgba(107, 124, 107, 0.08);
-    color: #4a4a4a;
+    background-color: rgba(74, 222, 128, 0.1);
+    color: var(--color-text-secondary);
   }
 
   &__action-impact-label {
     font-weight: 500;
-    color: #6b7c6b;
+    color: var(--color-low-risk);
   }
 
   &__cta {
@@ -85,12 +85,12 @@ limitations under the License.
     font-size: 1rem;
     font-weight: 500;
     color: #ffffff;
-    background-color: #475569;
+    background-color: var(--color-accent);
     border: none;
     cursor: pointer;
 
     &:hover {
-      background-color: #334155;
+      background-color: var(--color-accent-hover);
     }
   }
 }

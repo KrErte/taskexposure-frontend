@@ -20,14 +20,14 @@ limitations under the License.
     font-weight: 600;
     line-height: 1.2;
     margin: 0 0 1rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__copy {
     font-size: 1.125rem;
     line-height: 1.7;
     margin: 0 0 3rem 0;
-    color: #4a4a4a;
+    color: var(--color-text-secondary);
   }
 
   &__question {
@@ -40,14 +40,14 @@ limitations under the License.
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin: 0 0 1.5rem 0;
-    color: #6b7280;
+    color: var(--color-text-secondary);
   }
 
   &__context {
     font-size: 1rem;
     line-height: 1.6;
     margin: 0 0 0.75rem 0;
-    color: #4a4a4a;
+    color: var(--color-text-secondary);
   }
 
   &__question-text {
@@ -55,7 +55,7 @@ limitations under the License.
     font-weight: 500;
     line-height: 1.5;
     margin: 0 0 1.5rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__text-input {
@@ -64,7 +64,7 @@ limitations under the License.
 
   &__hint {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     margin: 0 0 0.75rem 0;
     font-style: italic;
   }
@@ -74,18 +74,19 @@ limitations under the License.
     padding: 1rem;
     font-size: 1rem;
     line-height: 1.5;
-    border: 1px solid #d1d5db;
-    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-text);
     resize: vertical;
     font-family: inherit;
 
     &:focus {
       outline: none;
-      border-color: #475569;
+      border-color: var(--color-accent);
     }
 
     &::placeholder {
-      color: #9ca3af;
+      color: var(--color-text-secondary);
     }
   }
 
@@ -100,12 +101,12 @@ limitations under the License.
     align-items: flex-start;
     gap: 0.75rem;
     padding: 1rem;
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     cursor: pointer;
 
     &:hover {
-      background-color: #f8fafc;
+      background-color: #323238;
     }
 
     input[type='radio'] {
@@ -117,7 +118,7 @@ limitations under the License.
   &__option-text {
     font-size: 1rem;
     line-height: 1.5;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__cta {
@@ -126,12 +127,12 @@ limitations under the License.
     font-size: 1rem;
     font-weight: 500;
     color: #ffffff;
-    background-color: #475569;
+    background-color: var(--color-accent);
     border: none;
     cursor: pointer;
 
     &:hover:not(:disabled) {
-      background-color: #334155;
+      background-color: var(--color-accent-hover);
     }
 
     &:disabled {

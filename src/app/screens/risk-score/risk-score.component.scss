@@ -30,15 +30,15 @@ limitations under the License.
     line-height: 1;
 
     &--low {
-      color: #6b7c6b;
+      color: var(--color-low-risk);
     }
 
     &--medium {
-      color: #b8860b;
+      color: var(--color-medium-risk);
     }
 
     &--high {
-      color: #8b2942;
+      color: var(--color-high-risk);
     }
   }
 
@@ -51,18 +51,18 @@ limitations under the License.
     letter-spacing: 0.05em;
 
     &--low {
-      color: #6b7c6b;
-      background-color: rgba(107, 124, 107, 0.1);
+      color: var(--color-low-risk);
+      background-color: rgba(74, 222, 128, 0.15);
     }
 
     &--moderate {
-      color: #b8860b;
-      background-color: rgba(184, 134, 11, 0.1);
+      color: var(--color-medium-risk);
+      background-color: rgba(251, 191, 36, 0.15);
     }
 
     &--high {
-      color: #8b2942;
-      background-color: rgba(139, 41, 66, 0.1);
+      color: var(--color-high-risk);
+      background-color: rgba(248, 113, 113, 0.15);
     }
   }
 
@@ -71,28 +71,28 @@ limitations under the License.
     font-weight: 600;
     line-height: 1.3;
     margin: 0 0 2rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__meaning {
     margin: 0 0 2rem 0;
     padding: 1.5rem;
-    background-color: #f8fafc;
-    border-left: 3px solid #cbd5e1;
+    background-color: var(--color-surface);
+    border-left: 3px solid var(--color-border);
   }
 
   &__meaning-text {
     font-size: 1rem;
     line-height: 1.6;
     margin: 0 0 1rem 0;
-    color: #1a1a1a;
+    color: var(--color-text);
   }
 
   &__meaning-action {
     font-size: 0.9375rem;
     line-height: 1.5;
     margin: 0;
-    color: #475569;
+    color: var(--color-accent);
     font-weight: 500;
   }
 
@@ -100,7 +100,7 @@ limitations under the License.
     font-size: 0.875rem;
     line-height: 1.6;
     margin: 0 0 3rem 0;
-    color: #6b7280;
+    color: var(--color-text-secondary);
   }
 
   &__cta {
@@ -109,12 +109,12 @@ limitations under the License.
     font-size: 1rem;
     font-weight: 500;
     color: #ffffff;
-    background-color: #475569;
+    background-color: var(--color-accent);
     border: none;
     cursor: pointer;
 
     &:hover {
-      background-color: #334155;
+      background-color: var(--color-accent-hover);
     }
   }
 }
