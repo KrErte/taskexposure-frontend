@@ -19,11 +19,12 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
 import { RadarChartComponent, RadarDataPoint } from '../../shared/components/radar-chart/radar-chart.component';
+import { ScoreBarComponent } from '../../shared/components/score-bar/score-bar.component';
 
 @Component({
   selector: 'app-risk-breakdown',
   standalone: true,
-  imports: [CommonModule, RadarChartComponent],
+  imports: [CommonModule, RadarChartComponent, ScoreBarComponent],
   templateUrl: './risk-breakdown.component.html',
   styleUrl: './risk-breakdown.component.scss',
 })

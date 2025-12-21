@@ -15,27 +15,32 @@ limitations under the License.
 -->
 
 <div class="risk-breakdown">
-  <h1 class="risk-breakdown__headline">{{ copy.headline }}</h1>
-  <p class="risk-breakdown__subheadline">{{ copy.subheadline }}</p>
+  <header class="risk-breakdown__header">
+    <h1 class="risk-breakdown__headline">{{ copy.headline }}</h1>
+    <p class="risk-breakdown__subheadline">{{ copy.subheadline }}</p>
+  </header>
 
   <!-- Summary Cards -->
   <div class="risk-breakdown__summary">
-    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--high">
-      <span class="risk-breakdown__summary-count">{{ exposureSummary.high }}</span>
+    <div class="glass-card glass-card--rose risk-breakdown__summary-card">
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--high">{{ exposureSummary.high }}</span>
       <span class="risk-breakdown__summary-label">High exposure</span>
+      <app-score-bar [value]="exposureSummary.high" [max]="tasks.length || 1" [segments]="5" color="high"></app-score-bar>
     </div>
-    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--medium">
-      <span class="risk-breakdown__summary-count">{{ exposureSummary.medium }}</span>
+    <div class="glass-card glass-card--amber risk-breakdown__summary-card">
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--medium">{{ exposureSummary.medium }}</span>
       <span class="risk-breakdown__summary-label">Moderate</span>
+      <app-score-bar [value]="exposureSummary.medium" [max]="tasks.length || 1" [segments]="5" color="medium"></app-score-bar>
     </div>
-    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--low">
-      <span class="risk-breakdown__summary-count">{{ exposureSummary.low }}</span>
+    <div class="glass-card glass-card--emerald risk-breakdown__summary-card">
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--low">{{ exposureSummary.low }}</span>
       <span class="risk-breakdown__summary-label">Low exposure</span>
+      <app-score-bar [value]="exposureSummary.low" [max]="tasks.length || 1" [segments]="5" color="low"></app-score-bar>
     </div>
   </div>
 
   <!-- Radar Chart -->
-  <div class="risk-breakdown__chart-section" *ngIf="tasks.length >= 3">
+  <div class="glass-card risk-breakdown__chart-section" *ngIf="tasks.length >= 3">
     <h2 class="risk-breakdown__section-title">AI Capability Overlap</h2>
     <app-radar-chart [data]="radarData" [size]="250"></app-radar-chart>
     <p class="risk-breakdown__chart-caption">
@@ -47,7 +52,7 @@ limitations under the License.
   <h2 class="risk-breakdown__section-title">Task-by-Task Analysis</h2>
   <div class="risk-breakdown__tasks">
     <div
-      class="risk-breakdown__task"
+      class="glass-card risk-breakdown__task"
       [ngClass]="getExposureClass(task.exposure)"
       [class.risk-breakdown__task--expanded]="expandedTaskIndex === i"
       *ngFor="let task of tasks; let i = index"
@@ -59,10 +64,11 @@ limitations under the License.
           <span class="risk-breakdown__task-description">{{ task.description }}</span>
         </div>
         <div class="risk-breakdown__task-meta">
-          <span
-            class="risk-breakdown__exposure-label"
-            [ngClass]="getExposureLabelClass(task.exposure)"
-          >
+          <span class="status-badge" [ngClass]="{
+            'status-badge--error': task.exposure === 'high',
+            'status-badge--warning': task.exposure === 'medium',
+            'status-badge--success': task.exposure === 'low'
+          }">
             {{ getExposureLabel(task.exposure) }}
           </span>
           <span class="risk-breakdown__expand-icon">
@@ -71,13 +77,13 @@ limitations under the License.
         </div>
       </div>
 
-      <!-- Progress bar -->
+      <!-- Score bar -->
       <div class="risk-breakdown__progress">
-        <div
-          class="risk-breakdown__progress-bar"
-          [ngClass]="'risk-breakdown__progress-bar--' + task.exposure"
-          [style.width.%]="getExposurePercentage(task.exposure)"
-        ></div>
+        <app-score-bar
+          [value]="getExposurePercentage(task.exposure)"
+          [segments]="10"
+          [color]="task.exposure"
+        ></app-score-bar>
       </div>
 
       <!-- Expanded content -->

@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<main class="layout">
+<main
+  class="layout"
+  [class.layout--with-sidebar]="showSidebar"
+  [class.layout--sidebar-collapsed]="sidebarCollapsed"
+>
   <div class="layout__container">
     <ng-content></ng-content>
   </div>

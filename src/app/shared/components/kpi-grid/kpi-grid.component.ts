@@ -17,14 +17,24 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+export interface KpiItem {
+  label: string;
+  value: string | number;
+  color?: 'accent' | 'purple' | 'cyan' | 'emerald' | 'amber' | 'rose' | 'low' | 'medium' | 'high';
+  icon?: string;
+  suffix?: string;
+  trend?: 'up' | 'down' | 'neutral';
+  trendValue?: string;
+}
+
 @Component({
-  selector: 'app-layout',
+  selector: 'app-kpi-grid',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss',
+  templateUrl: './kpi-grid.component.html',
+  styleUrl: './kpi-grid.component.scss',
 })
-export class LayoutComponent {
-  @Input() sidebarCollapsed = false;
-  @Input() showSidebar = true;
+export class KpiGridComponent {
+  @Input() items: KpiItem[] = [];
+  @Input() columns: 2 | 3 | 4 | 6 = 3;
 }

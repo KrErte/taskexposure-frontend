@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-detail-panel',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss',
+  templateUrl: './detail-panel.component.html',
+  styleUrl: './detail-panel.component.scss',
 })
-export class LayoutComponent {
-  @Input() sidebarCollapsed = false;
-  @Input() showSidebar = true;
+export class DetailPanelComponent {
+  @Input() isOpen = false;
+  @Input() title = '';
+  @Input() width = '400px';
+  @Output() close = new EventEmitter<void>();
+
+  onClose(): void {
+    this.close.emit();
+  }
+
+  onBackdropClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('detail-panel__backdrop')) {
+      this.onClose();
+    }
+  }
 }
