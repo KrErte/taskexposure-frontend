@@ -16,6 +16,13 @@ limitations under the License.
 
 <app-toast-container></app-toast-container>
 
+<!-- Payment Modal -->
+<app-payment-modal
+  [isOpen]="showPaymentModal"
+  (close)="onClosePaymentModal()"
+  (paymentComplete)="onPaymentComplete($event)"
+></app-payment-modal>
+
 <app-sidebar
   [currentScreen]="currentScreen"
   [collapsed]="sidebarCollapsed"
@@ -75,16 +82,40 @@ limitations under the License.
       ></app-risk-score>
     }
     @case ('risk-breakdown') {
-      <app-risk-breakdown
-        [tasks]="assessmentData.tasks"
-        (continue)="navigateTo('roadmap')"
-      ></app-risk-breakdown>
+      @if (premium.isPremium) {
+        <app-risk-breakdown
+          [tasks]="assessmentData.tasks"
+          (continue)="navigateTo('roadmap')"
+        ></app-risk-breakdown>
+      } @else {
+        <div class="paywall-screen">
+          <h1 class="paywall-screen__title">Task Breakdown</h1>
+          <p class="paywall-screen__subtitle">Unlock detailed analysis of each task</p>
+          <app-upgrade-cta
+            variant="full"
+            (upgrade)="onOpenPaymentModal()"
+            (continueFree)="onContinueFree()"
+          ></app-upgrade-cta>
+        </div>
+      }
     }
     @case ('roadmap') {
-      <app-roadmap
-        [actions]="assessmentData.roadmapActions"
-        (continue)="navigateTo('summary')"
-      ></app-roadmap>
+      @if (premium.isPremium) {
+        <app-roadmap
+          [actions]="assessmentData.roadmapActions"
+          (continue)="navigateTo('summary')"
+        ></app-roadmap>
+      } @else {
+        <div class="paywall-screen">
+          <h1 class="paywall-screen__title">Your Roadmap</h1>
+          <p class="paywall-screen__subtitle">Get personalized actions to reduce your exposure</p>
+          <app-upgrade-cta
+            variant="full"
+            (upgrade)="onOpenPaymentModal()"
+            (continueFree)="onContinueFree()"
+          ></app-upgrade-cta>
+        </div>
+      }
     }
     @case ('summary') {
       <app-summary
