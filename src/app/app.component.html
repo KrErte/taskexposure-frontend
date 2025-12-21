@@ -79,6 +79,7 @@ limitations under the License.
       <app-risk-score
         [score]="assessmentData.riskScore"
         (continue)="navigateTo('risk-breakdown')"
+        (upgrade)="onOpenPaymentModal()"
       ></app-risk-score>
     }
     @case ('risk-breakdown') {
@@ -89,8 +90,8 @@ limitations under the License.
         ></app-risk-breakdown>
       } @else {
         <div class="paywall-screen">
-          <h1 class="paywall-screen__title">Task Breakdown</h1>
-          <p class="paywall-screen__subtitle">Unlock detailed analysis of each task</p>
+          <h1 class="paywall-screen__title">Your Task Breakdown</h1>
+          <p class="paywall-screen__subtitle">See which of your tasks are most exposed and why</p>
           <app-upgrade-cta
             variant="full"
             (upgrade)="onOpenPaymentModal()"
@@ -107,8 +108,8 @@ limitations under the License.
         ></app-roadmap>
       } @else {
         <div class="paywall-screen">
-          <h1 class="paywall-screen__title">Your Roadmap</h1>
-          <p class="paywall-screen__subtitle">Get personalized actions to reduce your exposure</p>
+          <h1 class="paywall-screen__title">Your Action Plan</h1>
+          <p class="paywall-screen__subtitle">Get specific steps to reduce your exposure</p>
           <app-upgrade-cta
             variant="full"
             (upgrade)="onOpenPaymentModal()"

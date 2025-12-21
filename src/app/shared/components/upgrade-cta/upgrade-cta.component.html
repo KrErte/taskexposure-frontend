@@ -16,24 +16,24 @@ limitations under the License.
 
 <!-- Inline variant - compact CTA -->
 <div class="upgrade-cta upgrade-cta--inline" *ngIf="variant === 'inline'">
-  <div class="upgrade-cta__badge">PREMIUM</div>
+  <div class="upgrade-cta__badge">FULL ANALYSIS</div>
 
-  <h3 class="upgrade-cta__title">Unlock your full report</h3>
+  <h3 class="upgrade-cta__title">See what you can change</h3>
   <p class="upgrade-cta__description">
-    Get detailed breakdown, personalized roadmap, and unlimited assessments
+    Get your personalized action plan to reduce AI exposure
   </p>
 
   <div class="upgrade-cta__price-row">
     <span class="upgrade-cta__price">{{ price }}</span>
-    <span class="upgrade-cta__price-note">one-time</span>
+    <span class="upgrade-cta__price-note">for this assessment</span>
   </div>
 
   <div class="upgrade-cta__actions">
     <button type="button" class="upgrade-cta__button upgrade-cta__button--primary" (click)="onUpgrade()">
-      Unlock Full Report
+      Show me how to reduce my risk
     </button>
     <button type="button" class="upgrade-cta__button upgrade-cta__button--secondary" (click)="onContinueFree()">
-      Continue with free version
+      Skip for now
     </button>
   </div>
 </div>
@@ -41,15 +41,15 @@ limitations under the License.
 <!-- Full variant - comparison table -->
 <div class="upgrade-cta upgrade-cta--full" *ngIf="variant === 'full'">
   <div class="upgrade-cta__header">
-    <h2 class="upgrade-cta__headline">Choose your plan</h2>
-    <p class="upgrade-cta__subheadline">Unlock detailed insights to future-proof your career</p>
+    <h2 class="upgrade-cta__headline">Get your full analysis</h2>
+    <p class="upgrade-cta__subheadline">See exactly what to change to reduce your AI exposure</p>
   </div>
 
   <div class="upgrade-cta__plans">
     <!-- Free plan -->
     <div class="upgrade-cta__plan">
       <div class="upgrade-cta__plan-header">
-        <h3 class="upgrade-cta__plan-name">Free</h3>
+        <h3 class="upgrade-cta__plan-name">Basic</h3>
         <div class="upgrade-cta__plan-price">
           <span class="upgrade-cta__plan-amount">€0</span>
         </div>
@@ -66,18 +66,18 @@ limitations under the License.
         type="button"
         class="upgrade-cta__plan-button upgrade-cta__plan-button--secondary"
         (click)="onContinueFree()">
-        Continue Free
+        Skip for now
       </button>
     </div>
 
-    <!-- Premium plan -->
+    <!-- Full Analysis -->
     <div class="upgrade-cta__plan upgrade-cta__plan--featured">
-      <div class="upgrade-cta__plan-badge">RECOMMENDED</div>
+      <div class="upgrade-cta__plan-badge">FULL ANALYSIS</div>
       <div class="upgrade-cta__plan-header">
-        <h3 class="upgrade-cta__plan-name">Premium</h3>
+        <h3 class="upgrade-cta__plan-name">Complete Report</h3>
         <div class="upgrade-cta__plan-price">
           <span class="upgrade-cta__plan-amount">{{ price }}</span>
-          <span class="upgrade-cta__plan-period">one-time</span>
+          <span class="upgrade-cta__plan-period">this assessment</span>
         </div>
       </div>
       <ul class="upgrade-cta__plan-features">
@@ -92,7 +92,7 @@ limitations under the License.
         type="button"
         class="upgrade-cta__plan-button upgrade-cta__plan-button--primary"
         (click)="onUpgrade()">
-        Get Premium
+        Show me how to reduce my risk
       </button>
     </div>
   </div>

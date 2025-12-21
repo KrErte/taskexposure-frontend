@@ -129,4 +129,10 @@ limitations under the License.
       transform: translateY(0);
     }
   }
+
+  &__upgrade-section {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 480px;
+  }
 }

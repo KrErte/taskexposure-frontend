@@ -37,8 +37,19 @@ limitations under the License.
 
     <p class="risk-score__disclaimer">{{ copy.disclaimer }}</p>
 
-    <button type="button" class="risk-score__cta" (click)="onContinue()">
-      {{ copy.cta.primary }}
-    </button>
+    <!-- Show upgrade CTA for non-premium users -->
+    @if (!premium.isPremium) {
+      <div class="risk-score__upgrade-section">
+        <app-upgrade-cta
+          variant="inline"
+          (upgrade)="onUpgrade()"
+          (continueFree)="onContinue()"
+        ></app-upgrade-cta>
+      </div>
+    } @else {
+      <button type="button" class="risk-score__cta" (click)="onContinue()">
+        {{ copy.cta.primary }}
+      </button>
+    }
   </div>
 </div>

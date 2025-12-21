@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   RISK_SCORE_COPY,
@@ -22,17 +22,22 @@ import {
   getScoreMeaning,
 } from '../../shared/content/copy';
 import { AnimatedGaugeComponent } from '../../shared/components/animated-gauge/animated-gauge.component';
+import { UpgradeCtaComponent } from '../../shared/components/upgrade-cta/upgrade-cta.component';
+import { PremiumService } from '../../core/services/premium.service';
 
 @Component({
   selector: 'app-risk-score',
   standalone: true,
-  imports: [CommonModule, AnimatedGaugeComponent],
+  imports: [CommonModule, AnimatedGaugeComponent, UpgradeCtaComponent],
   templateUrl: './risk-score.component.html',
   styleUrl: './risk-score.component.scss',
 })
 export class RiskScoreComponent {
+  readonly premium = inject(PremiumService);
+
   @Input() score: number = 0;
   @Output() continue = new EventEmitter<void>();
+  @Output() upgrade = new EventEmitter<void>();
 
   readonly copy = RISK_SCORE_COPY;
   showContext: boolean = false;
@@ -59,5 +64,9 @@ export class RiskScoreComponent {
 
   onContinue(): void {
     this.continue.emit();
+  }
+
+  onUpgrade(): void {
+    this.upgrade.emit();
   }
 }

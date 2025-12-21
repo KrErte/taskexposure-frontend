@@ -41,39 +41,37 @@ export class UpgradeCtaComponent {
   readonly features: UpgradeFeature[] = [
     {
       icon: 'chart',
-      title: 'Detailed Breakdown',
-      description: 'Task-by-task analysis with AI capability radar',
+      title: 'Task-by-Task Analysis',
+      description: 'See exactly which tasks are most at risk',
     },
     {
       icon: 'map',
-      title: 'Personal Roadmap',
-      description: 'Actionable steps to reduce your exposure',
+      title: 'Your Action Plan',
+      description: 'Specific steps to reduce your exposure',
     },
     {
-      icon: 'infinity',
-      title: 'Unlimited Assessments',
-      description: 'Track your progress over time',
+      icon: 'brain',
+      title: 'AI Capability Radar',
+      description: 'Understand where AI overlaps with your work',
     },
     {
       icon: 'download',
       title: 'PDF Report',
-      description: 'Download and share your results',
+      description: 'Save and share your analysis',
     },
   ];
 
   readonly freeFeatures = [
     'Overall exposure score',
     'Basic AI capability match',
-    '1 assessment per account',
   ];
 
   readonly premiumFeatures = [
-    'Detailed task-by-task breakdown',
+    'Task-by-task breakdown',
     'AI capability radar chart',
-    'Personalized roadmap',
-    'Unlimited assessments',
+    'Personalized action plan',
+    'Detailed reasoning for each task',
     'PDF export',
-    'Progress tracking',
   ];
 
   onUpgrade(): void {
