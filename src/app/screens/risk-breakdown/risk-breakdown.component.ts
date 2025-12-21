@@ -31,7 +31,6 @@ export class RiskBreakdownComponent {
   @Output() continue = new EventEmitter<void>();
 
   readonly copy = RISK_BREAKDOWN_COPY;
-  readonly copy = RISK_BREAKDOWN_COPY;
 
   getExposureClass(exposure: Task['exposure']): string {
     return `risk-breakdown__task--${exposure}`;
