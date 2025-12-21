@@ -19,14 +19,14 @@ limitations under the License.
   <p class="roadmap__subheadline">{{ copy.subheadline }}</p>
 
   <!-- Progress Dashboard -->
-  <div class="roadmap__progress-dashboard">
+  <div class="glass-card glass-card--accent roadmap__progress-dashboard">
     <div class="roadmap__progress-header">
       <div class="roadmap__progress-stats">
-        <span class="roadmap__progress-count">{{ completedCount }}/{{ actionsWithState.length }}</span>
+        <span class="roadmap__progress-count font-mono">{{ completedCount }}/{{ actionsWithState.length }}</span>
         <span class="roadmap__progress-label">actions planned</span>
       </div>
       <div class="roadmap__impact-score">
-        <span class="roadmap__impact-value">+{{ totalImpact }}%</span>
+        <span class="roadmap__impact-value font-mono">+{{ totalImpact }}%</span>
         <span class="roadmap__impact-label">exposure reduction</span>
       </div>
     </div>
@@ -41,7 +41,7 @@ limitations under the License.
   <!-- Action Cards -->
   <div class="roadmap__actions">
     <div
-      class="roadmap__action"
+      class="glass-card roadmap__action"
       [class.roadmap__action--completed]="action.completed"
       [class.roadmap__action--celebrating]="celebratingIndex === i"
       *ngFor="let action of actionsWithState; let i = index"

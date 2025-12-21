@@ -19,7 +19,7 @@ limitations under the License.
 
   <p class="clarifying-questions__copy">{{ copy.subheadline }}</p>
 
-  <div class="clarifying-questions__question" *ngIf="currentQuestion">
+  <div class="glass-card clarifying-questions__question" *ngIf="currentQuestion">
     <p class="clarifying-questions__progress">{{ progressLabel }}</p>
     <p class="clarifying-questions__context" *ngIf="currentQuestion.context">{{ currentQuestion.context }}</p>
     <p class="clarifying-questions__question-text">{{ currentQuestion.question }}</p>
@@ -38,7 +38,7 @@ limitations under the License.
     <!-- Radio options for fallback questions -->
     <div class="clarifying-questions__options" *ngIf="currentQuestion.options">
       <label
-        class="clarifying-questions__option"
+        class="glass-card clarifying-questions__option"
         *ngFor="let option of currentQuestion.options; let i = index"
       >
         <input

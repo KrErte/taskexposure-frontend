@@ -23,14 +23,14 @@ limitations under the License.
     <p *ngFor="let instruction of copy.instructions">{{ instruction }}</p>
   </div>
 
-  <div class="manual-input__example">
+  <div class="glass-card manual-input__example">
     <p class="manual-input__example-bad">{{ copy.example.bad }}</p>
     <p class="manual-input__example-arrow">becomes</p>
     <p class="manual-input__example-good">{{ copy.example.good }}</p>
   </div>
 
   <div class="manual-input__task-list" *ngIf="tasks.length > 0">
-    <div class="manual-input__task" *ngFor="let task of tasks; let i = index">
+    <div class="glass-card glass-card--accent manual-input__task" *ngFor="let task of tasks; let i = index">
       <span class="manual-input__task-text">{{ task }}</span>
       <button type="button" class="manual-input__task-remove" (click)="removeTask(i)">
         {{ copy.labels?.['remove'] }}

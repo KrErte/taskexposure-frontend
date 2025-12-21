@@ -20,13 +20,13 @@ limitations under the License.
   <p class="input-method__subheadline" *ngFor="let paragraph of copy.body">{{ paragraph }}</p>
 
   <div class="input-method__options">
-    <div class="input-method__option input-method__option--disabled">
+    <div class="glass-card input-method__option input-method__option--disabled">
       <h2 class="input-method__option-title">{{ copy.options.cv.title }}</h2>
       <p class="input-method__option-desc">{{ copy.options.cv.description }}</p>
-      <span class="input-method__option-badge">{{ copy.options.cv.disabled }}</span>
+      <span class="status-badge status-badge--neutral">{{ copy.options.cv.disabled }}</span>
     </div>
 
-    <div class="input-method__option input-method__option--active" (click)="onSelectManual()">
+    <div class="glass-card glass-card--accent input-method__option input-method__option--active" (click)="onSelectManual()">
       <h2 class="input-method__option-title">{{ copy.options.manual.title }}</h2>
       <p class="input-method__option-desc">{{ copy.options.manual.description }}</p>
     </div>

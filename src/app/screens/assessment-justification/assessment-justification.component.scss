@@ -32,11 +32,11 @@ limitations under the License.
 
   &__section {
     margin: 0 0 2.5rem 0;
+    padding: 1.5rem;
+    border-radius: 12px;
 
     &--signal {
-      padding: 1.5rem;
-      background-color: var(--color-surface);
-      border-left: 3px solid var(--color-border);
+      // Signal section inherits glass card styling
     }
   }
 

@@ -83,9 +83,8 @@ limitations under the License.
   &__meaning {
     margin: 0 0 2rem 0;
     padding: 1.5rem;
-    background-color: var(--color-surface);
-    border-left: 3px solid var(--color-border);
     text-align: left;
+    border-radius: 12px;
   }
 
   &__meaning-text {
