@@ -29,6 +29,7 @@ limitations under the License.
     </div>
   }
 
+  <div class="page-wrapper" [class.page-exit]="isTransitioning" [class.page-enter]="!isTransitioning">
   @switch (currentScreen) {
     @case ('entry') {
       <app-entry (begin)="navigateTo('input-method')"></app-entry>
@@ -84,4 +85,5 @@ limitations under the License.
       ></app-summary>
     }
   }
+  </div>
 </app-layout>

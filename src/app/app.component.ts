@@ -37,6 +37,7 @@ import {
   RefineResponse,
   ClarifyingQuestion as ApiClarifyingQuestion,
 } from './core/models/risk-api.models';
+import { SkeletonLoaderComponent } from './shared/components/skeleton-loader/skeleton-loader.component';
 
 type ScreenId =
   | 'entry'
@@ -57,6 +58,9 @@ type ScreenId =
 
     // Layout wrapper used in app.component.html
     LayoutComponent,
+
+    // Shared components
+    SkeletonLoaderComponent,
 
     // Screens used in app.component.html
     EntryComponent,
@@ -79,6 +83,7 @@ export class AppComponent {
   currentScreen: ScreenId = 'entry';
   isLoading = false;
   errorMessage = '';
+  isTransitioning = false;
 
   // API response data
   private analysisId = '';
@@ -95,9 +100,17 @@ export class AppComponent {
   }
 
   navigateTo(screen: ScreenId): void {
-    this.currentScreen = screen;
-    this.errorMessage = '';
-    window.scrollTo(0, 0);
+    this.isTransitioning = true;
+
+    setTimeout(() => {
+      this.currentScreen = screen;
+      this.errorMessage = '';
+      window.scrollTo(0, 0);
+
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 50);
+    }, 200);
   }
 
   onTasksSubmitted(tasks: string[]): void {
