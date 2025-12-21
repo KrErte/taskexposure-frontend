@@ -14,22 +14,5 @@
  * limitations under the License.
  */
 
-import { Task } from './task.model';
-import { RoadmapAction } from './roadmap-action.model';
-import { SignalStrength } from './signal-strength.model';
+export type SignalStrength = 'low' | 'moderate' | 'high';
 
-export { RoadmapAction, SignalStrength };
-
-export interface ClarifyingQuestion {
-  prompt: string;
-  options: string[];
-}
-
-export interface AssessmentData {
-  tasks: Task[];
-  aiCapabilities: string[];
-  aiLimitations: string[];
-  signalStrength: SignalStrength;
-  riskScore: number;
-  roadmapActions: RoadmapAction[];
-}

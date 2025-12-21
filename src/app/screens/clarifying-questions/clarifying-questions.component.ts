@@ -17,9 +17,12 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { Task } from '../../shared/models/task.model';
 import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
 import { ClarifyingQuestion as ApiClarifyingQuestion } from '../../core/models/risk-api.models';
+
+
 
 interface LocalClarifyingQuestion {
   id: string;

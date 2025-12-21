@@ -16,12 +16,8 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< Updated upstream
-import { Task } from '../../app.component';
-import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
-=======
 import { Task } from '../../shared/models/task.model';
->>>>>>> Stashed changes
+import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
 
 @Component({
   selector: 'app-risk-breakdown',
@@ -34,13 +30,10 @@ export class RiskBreakdownComponent {
   @Input() tasks: Task[] = [];
   @Output() continue = new EventEmitter<void>();
 
-<<<<<<< Updated upstream
+  readonly copy = RISK_BREAKDOWN_COPY;
   readonly copy = RISK_BREAKDOWN_COPY;
 
-  getExposureClass(exposure: string): string {
-=======
   getExposureClass(exposure: Task['exposure']): string {
->>>>>>> Stashed changes
     return `risk-breakdown__task--${exposure}`;
   }
 
