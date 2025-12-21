@@ -32,6 +32,7 @@ import { RiskBreakdownComponent } from './screens/risk-breakdown/risk-breakdown.
 import { RoadmapComponent } from './screens/roadmap/roadmap.component';
 import { SummaryComponent } from './screens/summary/summary.component';
 import { RiskApiService } from './core/services/risk-api.service';
+import { SessionService } from './core/services/session.service';
 import {
   AnalyzeResponse,
   RefineResponse,
@@ -83,6 +84,7 @@ type ScreenId =
 })
 export class AppComponent {
   private readonly riskApi = inject(RiskApiService);
+  private readonly session = inject(SessionService);
   private readonly toast = inject(ToastService);
 
   // app.component.html uses this to switch sections
@@ -92,7 +94,6 @@ export class AppComponent {
   isTransitioning = false;
 
   // API response data
-  private analysisId = '';
   private apiClarifyingQuestions: ApiClarifyingQuestion[] = [];
   private analyzeResponse: AnalyzeResponse | null = null;
   private refineResponse: RefineResponse | null = null;
@@ -123,17 +124,21 @@ export class AppComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
+    // Start a new session
+    this.session.startSession();
+
     const request = {
       roleTitle: 'Professional',
       tenureYears: 3,
       contextText: tasks.join('\n'),
+      sessionId: this.session.sessionId ?? undefined,
     };
 
     this.riskApi.analyze(request).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.analyzeResponse = response;
-        this.analysisId = response.analysisId;
+        this.session.setAnalysisId(response.analysisId);
         this.apiClarifyingQuestions = response.clarifyingQuestions;
 
         // Map response to task format for display
@@ -163,8 +168,9 @@ export class AppComponent {
     }));
 
     const request = {
-      analysisId: this.analysisId,
+      analysisId: this.session.analysisId ?? '',
       answers: refineAnswers,
+      sessionId: this.session.sessionId ?? undefined,
     };
 
     this.riskApi.refine(request).subscribe({
