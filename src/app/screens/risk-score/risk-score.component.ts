@@ -58,6 +58,25 @@ export class RiskScoreComponent {
     return getScoreMeaning(this.score);
   }
 
+  /**
+   * Calculate potential reduced score (40-55% reduction based on actions)
+   * This creates the "control" feeling GPT mentioned
+   */
+  get potentialReducedScore(): number {
+    const reductionFactor = 0.45 + Math.random() * 0.1; // 45-55% reduction
+    const reduced = Math.round(this.score * (1 - reductionFactor));
+    return Math.max(reduced, 12); // Minimum 12% (never promise 0)
+  }
+
+  /**
+   * Number of changes needed (correlates with current score)
+   */
+  get changesNeeded(): number {
+    if (this.score >= 60) return 4;
+    if (this.score >= 40) return 3;
+    return 2;
+  }
+
   onAnimationComplete(): void {
     this.showContext = true;
   }

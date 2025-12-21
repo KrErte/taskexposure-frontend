@@ -135,4 +135,93 @@ limitations under the License.
     width: 100%;
     max-width: 480px;
   }
+
+  // Risk Reduction Potential teaser - the "control" moment
+  &__reduction-teaser {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  &__reduction-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  &__reduction-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(74, 222, 128, 0.15);
+    border-radius: 8px;
+    color: var(--color-low-risk);
+  }
+
+  &__reduction-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__reduction-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-low-risk);
+  }
+
+  &__reduction-value {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    line-height: 1.5;
+
+    strong {
+      color: var(--color-text);
+    }
+  }
+
+  &__reduction-numbers {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  &__reduction-from {
+    font-weight: 600;
+    color: var(--color-medium-risk);
+  }
+
+  &__reduction-arrow {
+    color: var(--color-text-secondary);
+  }
+
+  &__reduction-to {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-low-risk);
+  }
+
+  &__reduction-locked {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    svg {
+      opacity: 0.7;
+    }
+  }
 }
