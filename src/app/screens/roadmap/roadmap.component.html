@@ -16,22 +16,80 @@ limitations under the License.
 
 <div class="roadmap">
   <h1 class="roadmap__headline">{{ copy.headline }}</h1>
-
   <p class="roadmap__subheadline">{{ copy.subheadline }}</p>
 
+  <!-- Progress Dashboard -->
+  <div class="roadmap__progress-dashboard">
+    <div class="roadmap__progress-header">
+      <div class="roadmap__progress-stats">
+        <span class="roadmap__progress-count">{{ completedCount }}/{{ actionsWithState.length }}</span>
+        <span class="roadmap__progress-label">actions planned</span>
+      </div>
+      <div class="roadmap__impact-score">
+        <span class="roadmap__impact-value">+{{ totalImpact }}%</span>
+        <span class="roadmap__impact-label">exposure reduction</span>
+      </div>
+    </div>
+    <div class="roadmap__progress-bar-container">
+      <div class="roadmap__progress-bar" [style.width.%]="progressPercentage"></div>
+    </div>
+    <p class="roadmap__progress-hint" *ngIf="completedCount === 0">
+      Check off actions you plan to take
+    </p>
+  </div>
+
+  <!-- Action Cards -->
   <div class="roadmap__actions">
-    <div class="roadmap__action" *ngFor="let action of actions; let i = index">
-      <p class="roadmap__action-number">{{ copy.actionPrefix }} {{ i + 1 }}</p>
-      <h2 class="roadmap__action-title">{{ action.description }}</h2>
+    <div
+      class="roadmap__action"
+      [class.roadmap__action--completed]="action.completed"
+      [class.roadmap__action--celebrating]="celebratingIndex === i"
+      *ngFor="let action of actionsWithState; let i = index"
+    >
+      <!-- Celebration effect -->
+      <div class="roadmap__celebration" *ngIf="celebratingIndex === i">
+        <span class="roadmap__confetti roadmap__confetti--1"></span>
+        <span class="roadmap__confetti roadmap__confetti--2"></span>
+        <span class="roadmap__confetti roadmap__confetti--3"></span>
+        <span class="roadmap__confetti roadmap__confetti--4"></span>
+      </div>
+
+      <div class="roadmap__action-header">
+        <button
+          type="button"
+          class="roadmap__checkbox"
+          [class.roadmap__checkbox--checked]="action.completed"
+          (click)="toggleAction(i)"
+        >
+          <svg *ngIf="action.completed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M5 13l4 4L19 7"/>
+          </svg>
+        </button>
+        <div class="roadmap__action-info">
+          <div class="roadmap__action-meta">
+            <span class="roadmap__action-number">{{ copy.actionPrefix }} {{ i + 1 }}</span>
+            <span class="roadmap__difficulty" [ngClass]="'roadmap__difficulty--' + action.difficulty">
+              {{ getDifficultyLabel(action.difficulty) }}
+            </span>
+          </div>
+          <h2 class="roadmap__action-title">{{ action.description }}</h2>
+        </div>
+        <div class="roadmap__action-impact-badge">
+          <span class="roadmap__impact-number">+{{ action.impactScore }}%</span>
+        </div>
+      </div>
+
       <p class="roadmap__action-explanation">{{ action.explanation }}</p>
-      <p class="roadmap__action-impact">
+
+      <div class="roadmap__action-impact">
         <span class="roadmap__action-impact-label">{{ copy.impactLabel }}:</span>
         {{ action.impact }}
-      </p>
+      </div>
     </div>
   </div>
 
   <button type="button" class="roadmap__cta" (click)="onContinue()">
     {{ copy.cta.primary }}
+    <span class="roadmap__cta-arrow">&rarr;</span>
   </button>
 </div>
