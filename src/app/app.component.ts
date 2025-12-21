@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LayoutComponent } from './shared/layout/layout.component';
 
 import { Task } from './shared/models/task.model';
-import { AssessmentData } from './shared/models/assessment.model';
+import { AssessmentData, SignalStrength } from './shared/models/assessment.model';
 
 import { EntryComponent } from './screens/entry/entry.component';
 import { InputMethodComponent } from './screens/input-method/input-method.component';
@@ -31,6 +31,12 @@ import { RiskScoreComponent } from './screens/risk-score/risk-score.component';
 import { RiskBreakdownComponent } from './screens/risk-breakdown/risk-breakdown.component';
 import { RoadmapComponent } from './screens/roadmap/roadmap.component';
 import { SummaryComponent } from './screens/summary/summary.component';
+import { RiskApiService } from './core/services/risk-api.service';
+import {
+  AnalyzeResponse,
+  RefineResponse,
+  ClarifyingQuestion as ApiClarifyingQuestion,
+} from './core/models/risk-api.models';
 
 type ScreenId =
   | 'entry'
@@ -67,29 +73,112 @@ type ScreenId =
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  private readonly riskApi = inject(RiskApiService);
+
   // app.component.html uses this to switch sections
   currentScreen: ScreenId = 'entry';
+  isLoading = false;
+  errorMessage = '';
+
+  // API response data
+  private analysisId = '';
+  private apiClarifyingQuestions: ApiClarifyingQuestion[] = [];
+  private analyzeResponse: AnalyzeResponse | null = null;
+  private refineResponse: RefineResponse | null = null;
 
   // app.component.html expects assessmentData.*
   assessmentData: AssessmentData = this.createInitialMockAssessment();
 
+  // Expose API clarifying questions for the component
+  get clarifyingQuestions(): ApiClarifyingQuestion[] {
+    return this.apiClarifyingQuestions;
+  }
+
   navigateTo(screen: ScreenId): void {
     this.currentScreen = screen;
+    this.errorMessage = '';
+    window.scrollTo(0, 0);
   }
 
   onTasksSubmitted(tasks: string[]): void {
-    // Minimal v1 wiring: take user tasks if provided, otherwise keep mock defaults.
-    if (tasks?.length) {
-      // we keep the same risk mock but swap descriptions to what user typed
-      const newTasks = this.generateMockTaskAnalysis(tasks);
-      this.assessmentData = { ...this.assessmentData, tasks: newTasks };
-    }
-    this.navigateTo('clarifying-questions');
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const request = {
+      roleTitle: 'Professional',
+      tenureYears: 3,
+      contextText: tasks.join('\n'),
+    };
+
+    this.riskApi.analyze(request).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.analyzeResponse = response;
+        this.analysisId = response.analysisId;
+        this.apiClarifyingQuestions = response.clarifyingQuestions;
+
+        // Map response to task format for display
+        this.assessmentData.tasks = this.mapResponseToTasks(tasks, response);
+        this.assessmentData.aiCapabilities = response.strengths;
+        this.assessmentData.aiLimitations = response.risks;
+
+        this.navigateTo('clarifying-questions');
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to analyze tasks. Please try again.';
+        console.error('Analyze error:', error);
+        // Fallback to mock data
+        this.useFallbackForAnalysis(tasks);
+      },
+    });
   }
 
-  onClarifyingComplete(_answers: unknown): void {
-    // v1: after clarifying, show justification BEFORE score
-    this.navigateTo('assessment-justification');
+  onClarifyingComplete(answers: Map<string, string>): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const refineAnswers = Array.from(answers.entries()).map(([id, answer]) => ({
+      id,
+      answer,
+    }));
+
+    const request = {
+      analysisId: this.analysisId,
+      answers: refineAnswers,
+    };
+
+    this.riskApi.refine(request).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.refineResponse = response;
+
+        // Update assessment data from refine response
+        this.assessmentData.riskScore = response.replaceabilityPct;
+        this.assessmentData.aiCapabilities = response.strengths;
+        this.assessmentData.aiLimitations = response.risks;
+        this.assessmentData.signalStrength = this.mapConfidenceToSignalStrength(response.confidence);
+
+        // Map roadmap from response
+        if (response.roadmap?.items) {
+          this.assessmentData.roadmapActions = response.roadmap.items.map((item) => ({
+            title: item.title,
+            description: item.actions.join(' '),
+            mechanism: item.output,
+            impact: item.impact,
+          }));
+        }
+
+        this.navigateTo('assessment-justification');
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to process answers. Please try again.';
+        console.error('Refine error:', error);
+        // Fallback: navigate anyway with existing mock data
+        this.navigateTo('assessment-justification');
+      },
+    });
   }
 
   onShowScore(): void {
@@ -106,6 +195,30 @@ export class AppComponent {
 
   onFinish(): void {
     this.navigateTo('summary');
+  }
+
+  private useFallbackForAnalysis(tasks: string[]): void {
+    // Fallback to mock data when API fails
+    if (tasks?.length) {
+      const newTasks = this.generateMockTaskAnalysis(tasks);
+      this.assessmentData = { ...this.assessmentData, tasks: newTasks };
+    }
+    this.navigateTo('clarifying-questions');
+  }
+
+  private mapResponseToTasks(taskDescriptions: string[], response: AnalyzeResponse): Task[] {
+    return taskDescriptions.map((description, index) => ({
+      description,
+      exposure: index < 2 ? 'high' : index < 4 ? 'medium' : 'low',
+      reason: response.whySummary || 'Analysis based on AI capability assessment.',
+    }));
+  }
+
+  private mapConfidenceToSignalStrength(confidence: string): SignalStrength {
+    const conf = confidence?.toLowerCase() || 'medium';
+    if (conf.includes('high')) return 'high';
+    if (conf.includes('low')) return 'low';
+    return 'moderate';
   }
 
   private createInitialMockAssessment(): AssessmentData {
@@ -155,7 +268,7 @@ export class AppComponent {
   }
 
   private generateMockTaskAnalysis(taskDescriptions: string[]): Task[] {
-    const defaultsConst = [
+    const defaults: Task[] = [
       {
         description: 'Writing unit tests',
         exposure: 'high',
@@ -181,9 +294,7 @@ export class AppComponent {
         exposure: 'low',
         reason: 'Relationship-dependent, trust-based',
       },
-    ] as const satisfies readonly Task[];
-
-    const defaults = defaultsConst.map(t => ({ ...t }));
+    ];
 
     if (!taskDescriptions?.length) return defaults;
 

@@ -21,10 +21,22 @@ limitations under the License.
 
   <div class="clarifying-questions__question" *ngIf="currentQuestion">
     <p class="clarifying-questions__progress">{{ progressLabel }}</p>
-    <p class="clarifying-questions__context">{{ currentQuestion.context }}</p>
+    <p class="clarifying-questions__context" *ngIf="currentQuestion.context">{{ currentQuestion.context }}</p>
     <p class="clarifying-questions__question-text">{{ currentQuestion.question }}</p>
 
-    <div class="clarifying-questions__options">
+    <!-- Text input for API questions -->
+    <div class="clarifying-questions__text-input" *ngIf="!currentQuestion.options">
+      <p class="clarifying-questions__hint" *ngIf="currentQuestion.hint">{{ currentQuestion.hint }}</p>
+      <textarea
+        class="clarifying-questions__textarea"
+        [(ngModel)]="currentAnswer"
+        placeholder="Type your answer here..."
+        rows="4"
+      ></textarea>
+    </div>
+
+    <!-- Radio options for fallback questions -->
+    <div class="clarifying-questions__options" *ngIf="currentQuestion.options">
       <label
         class="clarifying-questions__option"
         *ngFor="let option of currentQuestion.options; let i = index"
@@ -32,7 +44,7 @@ limitations under the License.
         <input
           type="radio"
           [name]="'question-' + currentQuestion.id"
-          [checked]="answers.get(currentQuestion.id) === i"
+          [checked]="answers.get(currentQuestion.id) === option"
           (change)="selectAnswer(i)"
         />
         <span class="clarifying-questions__option-text">{{ option }}</span>
@@ -43,9 +55,9 @@ limitations under the License.
   <button
     type="button"
     class="clarifying-questions__cta"
-    [disabled]="!hasSelectedAnswer"
+    [disabled]="!hasSelectedAnswer || isLoading"
     (click)="nextQuestion()"
   >
-    {{ ctaLabel }}
+    {{ isLoading ? 'Processing...' : ctaLabel }}
   </button>
 </div>

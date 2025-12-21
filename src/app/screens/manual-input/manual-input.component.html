@@ -60,9 +60,9 @@ limitations under the License.
   <button
     type="button"
     class="manual-input__cta"
-    [disabled]="!canContinue"
+    [disabled]="!canContinue || isLoading"
     (click)="onContinue()"
   >
-    {{ copy.cta.primary }}
+    {{ isLoading ? 'Analyzing...' : copy.cta.primary }}
   </button>
 </div>

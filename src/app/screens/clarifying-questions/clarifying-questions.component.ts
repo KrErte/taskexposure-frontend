@@ -14,45 +14,53 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< Updated upstream
-import { Task } from '../../app.component';
-import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
-=======
+import { FormsModule } from '@angular/forms';
 import { Task } from '../../shared/models/task.model';
->>>>>>> Stashed changes
+import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
+import { ClarifyingQuestion as ApiClarifyingQuestion } from '../../core/models/risk-api.models';
 
-interface ClarifyingQuestion {
-  id: number;
+interface LocalClarifyingQuestion {
+  id: string;
   context: string;
   question: string;
-  options: string[];
+  hint?: string;
+  options?: string[];
 }
 
 @Component({
   selector: 'app-clarifying-questions',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './clarifying-questions.component.html',
   styleUrl: './clarifying-questions.component.scss',
 })
-export class ClarifyingQuestionsComponent implements OnInit {
+export class ClarifyingQuestionsComponent implements OnInit, OnChanges {
   @Input() tasks: Task[] = [];
-  @Output() complete = new EventEmitter<Map<number, number>>();
+  @Input() apiQuestions: ApiClarifyingQuestion[] = [];
+  @Input() isLoading = false;
+  @Output() complete = new EventEmitter<Map<string, string>>();
 
   readonly copy = CLARIFYING_QUESTIONS_COPY;
 
-  questions: ClarifyingQuestion[] = [];
+  questions: LocalClarifyingQuestion[] = [];
   currentQuestionIndex: number = 0;
-  answers: Map<number, number> = new Map();
+  answers: Map<string, string> = new Map();
+  currentAnswer: string = '';
 
-  get currentQuestion(): ClarifyingQuestion | null {
+  get currentQuestion(): LocalClarifyingQuestion | null {
     return this.questions[this.currentQuestionIndex] || null;
   }
 
   get hasSelectedAnswer(): boolean {
-    return this.currentQuestion !== null && this.answers.has(this.currentQuestion.id);
+    if (!this.currentQuestion) return false;
+    // For API questions (text input), check if currentAnswer is filled
+    if (!this.currentQuestion.options) {
+      return this.currentAnswer.trim().length > 0;
+    }
+    // For option-based questions, check if an answer is stored
+    return this.answers.has(this.currentQuestion.id);
   }
 
   get isLastQuestion(): boolean {
@@ -73,13 +81,34 @@ export class ClarifyingQuestionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.generateQuestions();
+    this.initializeQuestions();
   }
 
-  private generateQuestions(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['apiQuestions'] && this.apiQuestions.length > 0) {
+      this.initializeQuestions();
+    }
+  }
+
+  private initializeQuestions(): void {
+    if (this.apiQuestions && this.apiQuestions.length > 0) {
+      // Use API questions
+      this.questions = this.apiQuestions.map((q) => ({
+        id: q.id,
+        context: q.hint || '',
+        question: q.question,
+        hint: q.hint,
+      }));
+    } else {
+      // Fallback to generated questions
+      this.generateFallbackQuestions();
+    }
+  }
+
+  private generateFallbackQuestions(): void {
     this.questions = [
       {
-        id: 1,
+        id: '1',
         context: 'You mentioned tasks involving data or information processing.',
         question: 'Which best describes your involvement?',
         options: [
@@ -89,7 +118,7 @@ export class ClarifyingQuestionsComponent implements OnInit {
         ],
       },
       {
-        id: 2,
+        id: '2',
         context: 'You mentioned communication-related tasks.',
         question: 'Which best describes your communication responsibilities?',
         options: [
@@ -99,7 +128,7 @@ export class ClarifyingQuestionsComponent implements OnInit {
         ],
       },
       {
-        id: 3,
+        id: '3',
         context: 'You mentioned work involving analysis or review.',
         question: 'Which best describes your analytical work?',
         options: [
@@ -112,15 +141,32 @@ export class ClarifyingQuestionsComponent implements OnInit {
   }
 
   selectAnswer(optionIndex: number): void {
-    if (this.currentQuestion) {
-      this.answers.set(this.currentQuestion.id, optionIndex);
+    if (this.currentQuestion && this.currentQuestion.options) {
+      this.answers.set(this.currentQuestion.id, this.currentQuestion.options[optionIndex]);
+    }
+  }
+
+  submitTextAnswer(): void {
+    if (this.currentQuestion && this.currentAnswer.trim()) {
+      this.answers.set(this.currentQuestion.id, this.currentAnswer.trim());
+      this.currentAnswer = '';
+      this.nextQuestion();
     }
   }
 
   nextQuestion(): void {
     if (this.isLastQuestion) {
+      // Save current answer if it's a text input
+      if (this.currentQuestion && !this.currentQuestion.options && this.currentAnswer.trim()) {
+        this.answers.set(this.currentQuestion.id, this.currentAnswer.trim());
+      }
       this.complete.emit(this.answers);
     } else {
+      // Save current answer if it's a text input
+      if (this.currentQuestion && !this.currentQuestion.options && this.currentAnswer.trim()) {
+        this.answers.set(this.currentQuestion.id, this.currentAnswer.trim());
+        this.currentAnswer = '';
+      }
       this.currentQuestionIndex++;
     }
   }

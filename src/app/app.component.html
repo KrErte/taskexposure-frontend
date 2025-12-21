@@ -15,6 +15,20 @@ limitations under the License.
 -->
 
 <app-layout>
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Analyzing your tasks...</p>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      <p>{{ errorMessage }}</p>
+      <button (click)="errorMessage = ''">Dismiss</button>
+    </div>
+  }
+
   @switch (currentScreen) {
     @case ('entry') {
       <app-entry (begin)="navigateTo('input-method')"></app-entry>
@@ -23,11 +37,16 @@ limitations under the License.
       <app-input-method (selectManual)="navigateTo('manual-input')"></app-input-method>
     }
     @case ('manual-input') {
-      <app-manual-input (tasksSubmitted)="onTasksSubmitted($event)"></app-manual-input>
+      <app-manual-input
+        [isLoading]="isLoading"
+        (tasksSubmitted)="onTasksSubmitted($event)"
+      ></app-manual-input>
     }
     @case ('clarifying-questions') {
       <app-clarifying-questions
         [tasks]="assessmentData.tasks"
+        [apiQuestions]="clarifyingQuestions"
+        [isLoading]="isLoading"
         (complete)="onClarifyingComplete($event)"
       ></app-clarifying-questions>
     }

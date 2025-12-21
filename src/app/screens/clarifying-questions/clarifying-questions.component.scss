@@ -58,6 +58,37 @@ limitations under the License.
     color: #1a1a1a;
   }
 
+  &__text-input {
+    margin-bottom: 1.5rem;
+  }
+
+  &__hint {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 0.75rem 0;
+    font-style: italic;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    resize: vertical;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: #475569;
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
   &__options {
     display: flex;
     flex-direction: column;
