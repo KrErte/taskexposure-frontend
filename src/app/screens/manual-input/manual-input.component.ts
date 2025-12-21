@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MANUAL_INPUT_COPY } from '../../shared/content/copy';
@@ -27,6 +27,7 @@ import { MANUAL_INPUT_COPY } from '../../shared/content/copy';
   styleUrl: './manual-input.component.scss',
 })
 export class ManualInputComponent {
+  @Input() isLoading = false;
   @Output() tasksSubmitted = new EventEmitter<string[]>();
 
   readonly copy = MANUAL_INPUT_COPY;
