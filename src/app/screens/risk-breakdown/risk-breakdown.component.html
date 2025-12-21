@@ -16,29 +16,89 @@ limitations under the License.
 
 <div class="risk-breakdown">
   <h1 class="risk-breakdown__headline">{{ copy.headline }}</h1>
-
   <p class="risk-breakdown__subheadline">{{ copy.subheadline }}</p>
 
+  <!-- Summary Cards -->
+  <div class="risk-breakdown__summary">
+    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--high">
+      <span class="risk-breakdown__summary-count">{{ exposureSummary.high }}</span>
+      <span class="risk-breakdown__summary-label">High exposure</span>
+    </div>
+    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--medium">
+      <span class="risk-breakdown__summary-count">{{ exposureSummary.medium }}</span>
+      <span class="risk-breakdown__summary-label">Moderate</span>
+    </div>
+    <div class="risk-breakdown__summary-card risk-breakdown__summary-card--low">
+      <span class="risk-breakdown__summary-count">{{ exposureSummary.low }}</span>
+      <span class="risk-breakdown__summary-label">Low exposure</span>
+    </div>
+  </div>
+
+  <!-- Radar Chart -->
+  <div class="risk-breakdown__chart-section" *ngIf="tasks.length >= 3">
+    <h2 class="risk-breakdown__section-title">AI Capability Overlap</h2>
+    <app-radar-chart [data]="radarData" [size]="250"></app-radar-chart>
+    <p class="risk-breakdown__chart-caption">
+      Higher values indicate greater overlap with current AI capabilities
+    </p>
+  </div>
+
+  <!-- Task Cards -->
+  <h2 class="risk-breakdown__section-title">Task-by-Task Analysis</h2>
   <div class="risk-breakdown__tasks">
     <div
       class="risk-breakdown__task"
       [ngClass]="getExposureClass(task.exposure)"
-      *ngFor="let task of tasks"
+      [class.risk-breakdown__task--expanded]="expandedTaskIndex === i"
+      *ngFor="let task of tasks; let i = index"
+      (click)="toggleTaskExpanded(i)"
     >
       <div class="risk-breakdown__task-header">
-        <span class="risk-breakdown__task-description">{{ task.description }}</span>
-        <span
-          class="risk-breakdown__exposure-label"
-          [ngClass]="getExposureLabelClass(task.exposure)"
-        >
-          {{ getExposureLabel(task.exposure) }}
-        </span>
+        <div class="risk-breakdown__task-info">
+          <span class="risk-breakdown__task-number">#{{ i + 1 }}</span>
+          <span class="risk-breakdown__task-description">{{ task.description }}</span>
+        </div>
+        <div class="risk-breakdown__task-meta">
+          <span
+            class="risk-breakdown__exposure-label"
+            [ngClass]="getExposureLabelClass(task.exposure)"
+          >
+            {{ getExposureLabel(task.exposure) }}
+          </span>
+          <span class="risk-breakdown__expand-icon">
+            {{ expandedTaskIndex === i ? '−' : '+' }}
+          </span>
+        </div>
       </div>
-      <p class="risk-breakdown__task-reason">{{ task.reason }}</p>
+
+      <!-- Progress bar -->
+      <div class="risk-breakdown__progress">
+        <div
+          class="risk-breakdown__progress-bar"
+          [ngClass]="'risk-breakdown__progress-bar--' + task.exposure"
+          [style.width.%]="getExposurePercentage(task.exposure)"
+        ></div>
+      </div>
+
+      <!-- Expanded content -->
+      <div class="risk-breakdown__task-details" *ngIf="expandedTaskIndex === i">
+        <p class="risk-breakdown__task-reason">{{ task.reason }}</p>
+        <div class="risk-breakdown__task-insight">
+          <span class="risk-breakdown__insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </span>
+          <span class="risk-breakdown__insight-text">
+            {{ copy.exposureDescriptors[task.exposure] }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
   <button type="button" class="risk-breakdown__cta" (click)="onContinue()">
     {{ copy.cta.primary }}
+    <span class="risk-breakdown__cta-arrow">&rarr;</span>
   </button>
 </div>

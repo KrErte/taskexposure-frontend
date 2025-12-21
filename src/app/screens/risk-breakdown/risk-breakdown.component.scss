@@ -26,21 +26,114 @@ limitations under the License.
   &__subheadline {
     font-size: 1.125rem;
     line-height: 1.6;
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 2rem 0;
     color: var(--color-text-secondary);
   }
 
+  // Summary Cards
+  &__summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  &__summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    text-align: center;
+
+    &--high {
+      border-top: 3px solid var(--color-high-risk);
+    }
+
+    &--medium {
+      border-top: 3px solid var(--color-medium-risk);
+    }
+
+    &--low {
+      border-top: 3px solid var(--color-low-risk);
+    }
+  }
+
+  &__summary-count {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'SF Mono', monospace;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+
+    .risk-breakdown__summary-card--high & {
+      color: var(--color-high-risk);
+    }
+
+    .risk-breakdown__summary-card--medium & {
+      color: var(--color-medium-risk);
+    }
+
+    .risk-breakdown__summary-card--low & {
+      color: var(--color-low-risk);
+    }
+  }
+
+  &__summary-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+  }
+
+  // Chart Section
+  &__chart-section {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  &__chart-caption {
+    font-size: 0.8125rem;
+    margin: 1rem 0 0 0;
+    color: var(--color-text-secondary);
+  }
+
+  &__section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 1rem 0;
+    color: var(--color-text-secondary);
+  }
+
+  // Task Cards
   &__tasks {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin: 0 0 3rem 0;
+    gap: 1rem;
+    margin: 0 0 2rem 0;
   }
 
   &__task {
     padding: 1.25rem;
     background-color: var(--color-surface);
     border-left: 4px solid;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+
+    &--expanded {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 
     &--high {
       border-left-color: var(--color-high-risk);
@@ -63,11 +156,70 @@ limitations under the License.
     margin-bottom: 0.75rem;
   }
 
+  &__task-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  &__task-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-family: 'SF Mono', monospace;
+  }
+
   &__task-description {
     font-size: 1rem;
     font-weight: 500;
     color: var(--color-text);
-    flex: 1;
+  }
+
+  &__task-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__expand-icon {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--color-text-secondary);
+    width: 1.5rem;
+    text-align: center;
+  }
+
+  // Progress bar
+  &__progress {
+    height: 4px;
+    background-color: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0;
+    transition: margin-bottom 0.2s ease;
+
+    .risk-breakdown__task--expanded & {
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease-out;
+
+    &--high {
+      background-color: var(--color-high-risk);
+    }
+
+    &--medium {
+      background-color: var(--color-medium-risk);
+    }
+
+    &--low {
+      background-color: var(--color-low-risk);
+    }
   }
 
   &__exposure-label {
@@ -94,15 +246,61 @@ limitations under the License.
     }
   }
 
+  // Expanded task details
+  &__task-details {
+    animation: slide-down 0.2s ease-out;
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   &__task-reason {
     font-size: 0.9375rem;
     line-height: 1.6;
-    margin: 0;
+    margin: 0 0 1rem 0;
     color: var(--color-text-secondary);
   }
 
+  &__task-insight {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: rgba(96, 165, 250, 0.1);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  &__insight-icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-accent);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__insight-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  // CTA
   &__cta {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 1rem 2rem;
     font-size: 1rem;
     font-weight: 500;
@@ -110,9 +308,19 @@ limitations under the License.
     background-color: var(--color-accent);
     border: none;
     cursor: pointer;
+    transition: all 0.2s ease;
 
     &:hover {
       background-color: var(--color-accent-hover);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__cta-arrow {
+    transition: transform 0.2s ease;
+
+    .risk-breakdown__cta:hover & {
+      transform: translateX(4px);
     }
   }
 }
