@@ -19,11 +19,12 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
 import { SUMMARY_COPY } from '../../shared/content/copy';
+import { KpiGridComponent, KpiItem } from '../../shared/components/kpi-grid/kpi-grid.component';
 
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, KpiGridComponent],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.scss',
 })
@@ -33,6 +34,54 @@ export class SummaryComponent {
   @Input() topAction: RoadmapAction | undefined;
 
   readonly copy = SUMMARY_COPY;
+
+  get kpiItems(): KpiItem[] {
+    return [
+      {
+        label: 'Exposure Score',
+        value: this.riskScore,
+        suffix: '%',
+        color: this.getScoreColor(),
+        icon: 'target',
+      },
+      {
+        label: 'High Risk Tasks',
+        value: this.highExposureTasks.length,
+        color: 'rose',
+        icon: 'zap',
+      },
+      {
+        label: 'Low Risk Tasks',
+        value: this.lowExposureTasks.length,
+        color: 'emerald',
+        icon: 'shield',
+      },
+      {
+        label: 'Total Tasks',
+        value: this.tasks.length,
+        color: 'accent',
+        icon: 'chart',
+      },
+      {
+        label: 'Medium Risk',
+        value: this.mediumExposureTasks.length,
+        color: 'amber',
+        icon: 'clock',
+      },
+      {
+        label: 'Actions',
+        value: this.topAction ? '1+' : '0',
+        color: 'purple',
+        icon: 'users',
+      },
+    ];
+  }
+
+  private getScoreColor(): 'low' | 'medium' | 'high' {
+    if (this.riskScore <= 30) return 'low';
+    if (this.riskScore <= 60) return 'medium';
+    return 'high';
+  }
 
   get scoreColorClass(): string {
     if (this.riskScore <= 30) return 'summary__score--low';
@@ -46,6 +95,10 @@ export class SummaryComponent {
 
   get lowExposureTasks(): Task[] {
     return this.tasks.filter((t) => t.exposure === 'low');
+  }
+
+  get mediumExposureTasks(): Task[] {
+    return this.tasks.filter((t) => t.exposure === 'medium');
   }
 
   downloadReport(): void {

@@ -41,6 +41,7 @@ import {
 import { SkeletonLoaderComponent } from './shared/components/skeleton-loader/skeleton-loader.component';
 import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 import { EmptyStateComponent } from './shared/components/empty-state/empty-state.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { ToastService } from './core/services/toast.service';
 
 type ScreenId =
@@ -67,6 +68,7 @@ type ScreenId =
     SkeletonLoaderComponent,
     ToastContainerComponent,
     EmptyStateComponent,
+    SidebarComponent,
 
     // Screens used in app.component.html
     EntryComponent,
@@ -92,6 +94,11 @@ export class AppComponent {
   isLoading = false;
   errorMessage = '';
   isTransitioning = false;
+  sidebarCollapsed = false;
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
 
   // API response data
   private apiClarifyingQuestions: ApiClarifyingQuestion[] = [];

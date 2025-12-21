@@ -16,7 +16,14 @@ limitations under the License.
 
 <app-toast-container></app-toast-container>
 
-<app-layout>
+<app-sidebar
+  [currentScreen]="currentScreen"
+  [collapsed]="sidebarCollapsed"
+  (navigate)="navigateTo($any($event))"
+  (toggleCollapse)="toggleSidebar()"
+></app-sidebar>
+
+<app-layout [showSidebar]="true" [sidebarCollapsed]="sidebarCollapsed">
   @if (isLoading) {
     <div class="loading-overlay">
       <div class="loading-spinner"></div>

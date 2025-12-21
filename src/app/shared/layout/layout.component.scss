@@ -16,11 +16,31 @@ limitations under the License.
 
 .layout {
   min-height: 100vh;
-  padding: 4rem 1.5rem;
+  padding: 3rem 2rem;
   background-color: var(--color-background);
+  transition: margin-left 0.3s ease, padding 0.3s ease;
+
+  &--with-sidebar {
+    margin-left: var(--sidebar-width);
+    padding: 2rem 3rem;
+  }
+
+  &--sidebar-collapsed {
+    margin-left: var(--sidebar-collapsed-width);
+  }
 }
 
 .layout__container {
-  max-width: 640px;
+  max-width: 800px;
   margin: 0 auto;
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .layout {
+    &--with-sidebar {
+      margin-left: 0;
+      padding: 2rem 1rem;
+    }
+  }
 }

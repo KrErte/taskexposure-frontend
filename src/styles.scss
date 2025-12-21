@@ -21,14 +21,33 @@ limitations under the License.
 :root {
   --color-text: #e5e5e5;
   --color-text-secondary: #a1a1aa;
-  --color-background: #18181b;
-  --color-surface: #27272a;
-  --color-border: #3f3f46;
+  --color-background: #0a0a0f;
+  --color-surface: #16161d;
+  --color-surface-elevated: #1e1e26;
+  --color-border: #2a2a35;
+  --color-border-subtle: #1f1f28;
   --color-low-risk: #4ade80;
   --color-medium-risk: #fbbf24;
   --color-high-risk: #f87171;
   --color-accent: #60a5fa;
   --color-accent-hover: #3b82f6;
+  --color-accent-glow: rgba(96, 165, 250, 0.15);
+
+  // New accent colors for dashboard
+  --color-purple: #a855f7;
+  --color-purple-glow: rgba(168, 85, 247, 0.15);
+  --color-cyan: #22d3ee;
+  --color-cyan-glow: rgba(34, 211, 238, 0.15);
+  --color-emerald: #34d399;
+  --color-emerald-glow: rgba(52, 211, 153, 0.15);
+  --color-amber: #fbbf24;
+  --color-amber-glow: rgba(251, 191, 36, 0.15);
+  --color-rose: #fb7185;
+  --color-rose-glow: rgba(251, 113, 133, 0.15);
+
+  // Sidebar
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 72px;
 }
 
 * {
@@ -228,4 +247,195 @@ button:focus-visible {
 // Smooth scrolling
 html {
   scroll-behavior: smooth;
+}
+
+// ============================================
+// GLASS MORPHISM CARDS
+// ============================================
+
+.glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 30, 38, 0.8) 0%,
+    rgba(22, 22, 29, 0.6) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  &--accent {
+    border-color: rgba(96, 165, 250, 0.3);
+    box-shadow: 0 0 20px var(--color-accent-glow);
+
+    &:hover {
+      border-color: rgba(96, 165, 250, 0.5);
+      box-shadow: 0 0 30px var(--color-accent-glow);
+    }
+  }
+
+  &--purple {
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 20px var(--color-purple-glow);
+  }
+
+  &--cyan {
+    border-color: rgba(34, 211, 238, 0.3);
+    box-shadow: 0 0 20px var(--color-cyan-glow);
+  }
+
+  &--emerald {
+    border-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 20px var(--color-emerald-glow);
+  }
+
+  &--amber {
+    border-color: rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 20px var(--color-amber-glow);
+  }
+
+  &--rose {
+    border-color: rgba(251, 113, 133, 0.3);
+    box-shadow: 0 0 20px var(--color-rose-glow);
+  }
+}
+
+// ============================================
+// KPI CARD STYLES
+// ============================================
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  &__value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'SF Mono', monospace;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+
+    &--accent { color: var(--color-accent); }
+    &--purple { color: var(--color-purple); }
+    &--cyan { color: var(--color-cyan); }
+    &--emerald { color: var(--color-emerald); }
+    &--amber { color: var(--color-amber); }
+    &--rose { color: var(--color-rose); }
+    &--low { color: var(--color-low-risk); }
+    &--medium { color: var(--color-medium-risk); }
+    &--high { color: var(--color-high-risk); }
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+// ============================================
+// STATUS BADGES
+// ============================================
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border-radius: 4px;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  &--success {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--color-emerald);
+    &::before { background: var(--color-emerald); }
+  }
+
+  &--warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--color-amber);
+    &::before { background: var(--color-amber); }
+  }
+
+  &--error {
+    background: rgba(251, 113, 133, 0.15);
+    color: var(--color-rose);
+    &::before { background: var(--color-rose); }
+  }
+
+  &--info {
+    background: rgba(96, 165, 250, 0.15);
+    color: var(--color-accent);
+    &::before { background: var(--color-accent); }
+  }
+
+  &--neutral {
+    background: rgba(161, 161, 170, 0.15);
+    color: var(--color-text-secondary);
+    &::before { background: var(--color-text-secondary); }
+  }
+}
+
+// ============================================
+// SCORE BAR SEGMENTS
+// ============================================
+
+.score-bar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-border);
+
+  &__segment {
+    flex: 1;
+    background: var(--color-border-subtle);
+    transition: background 0.3s ease;
+
+    &--filled {
+      &.low { background: var(--color-low-risk); }
+      &.medium { background: var(--color-medium-risk); }
+      &.high { background: var(--color-high-risk); }
+      &.accent { background: var(--color-accent); }
+      &.purple { background: var(--color-purple); }
+      &.cyan { background: var(--color-cyan); }
+    }
+  }
 }
