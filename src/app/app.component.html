@@ -16,6 +16,13 @@ limitations under the License.
 
 <app-toast-container></app-toast-container>
 
+<!-- Payment Modal -->
+<app-payment-modal
+  [isOpen]="showPaymentModal"
+  (close)="onClosePaymentModal()"
+  (paymentComplete)="onPaymentComplete($event)"
+></app-payment-modal>
+
 <app-sidebar
   [currentScreen]="currentScreen"
   [collapsed]="sidebarCollapsed"
@@ -72,19 +79,44 @@ limitations under the License.
       <app-risk-score
         [score]="assessmentData.riskScore"
         (continue)="navigateTo('risk-breakdown')"
+        (upgrade)="onOpenPaymentModal()"
       ></app-risk-score>
     }
     @case ('risk-breakdown') {
-      <app-risk-breakdown
-        [tasks]="assessmentData.tasks"
-        (continue)="navigateTo('roadmap')"
-      ></app-risk-breakdown>
+      @if (premium.isPremium) {
+        <app-risk-breakdown
+          [tasks]="assessmentData.tasks"
+          (continue)="navigateTo('roadmap')"
+        ></app-risk-breakdown>
+      } @else {
+        <div class="paywall-screen">
+          <h1 class="paywall-screen__title">Your Task Breakdown</h1>
+          <p class="paywall-screen__subtitle">See which of your tasks are most exposed and why</p>
+          <app-upgrade-cta
+            variant="full"
+            (upgrade)="onOpenPaymentModal()"
+            (continueFree)="onContinueFree()"
+          ></app-upgrade-cta>
+        </div>
+      }
     }
     @case ('roadmap') {
-      <app-roadmap
-        [actions]="assessmentData.roadmapActions"
-        (continue)="navigateTo('summary')"
-      ></app-roadmap>
+      @if (premium.isPremium) {
+        <app-roadmap
+          [actions]="assessmentData.roadmapActions"
+          (continue)="navigateTo('summary')"
+        ></app-roadmap>
+      } @else {
+        <div class="paywall-screen">
+          <h1 class="paywall-screen__title">Your Action Plan</h1>
+          <p class="paywall-screen__subtitle">Get specific steps to reduce your exposure</p>
+          <app-upgrade-cta
+            variant="full"
+            (upgrade)="onOpenPaymentModal()"
+            (continueFree)="onContinueFree()"
+          ></app-upgrade-cta>
+        </div>
+      }
     }
     @case ('summary') {
       <app-summary

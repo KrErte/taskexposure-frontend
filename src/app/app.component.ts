@@ -33,6 +33,7 @@ import { RoadmapComponent } from './screens/roadmap/roadmap.component';
 import { SummaryComponent } from './screens/summary/summary.component';
 import { RiskApiService } from './core/services/risk-api.service';
 import { SessionService } from './core/services/session.service';
+import { PremiumService } from './core/services/premium.service';
 import {
   AnalyzeResponse,
   RefineResponse,
@@ -43,6 +44,8 @@ import { ToastContainerComponent } from './shared/components/toast-container/toa
 import { EmptyStateComponent } from './shared/components/empty-state/empty-state.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { ToastService } from './core/services/toast.service';
+import { PaymentModalComponent, PaymentResult } from './shared/components/payment-modal/payment-modal.component';
+import { UpgradeCtaComponent } from './shared/components/upgrade-cta/upgrade-cta.component';
 
 type ScreenId =
   | 'entry'
@@ -69,6 +72,8 @@ type ScreenId =
     ToastContainerComponent,
     EmptyStateComponent,
     SidebarComponent,
+    PaymentModalComponent,
+    UpgradeCtaComponent,
 
     // Screens used in app.component.html
     EntryComponent,
@@ -88,6 +93,7 @@ export class AppComponent {
   private readonly riskApi = inject(RiskApiService);
   private readonly session = inject(SessionService);
   private readonly toast = inject(ToastService);
+  readonly premium = inject(PremiumService);
 
   // app.component.html uses this to switch sections
   currentScreen: ScreenId = 'entry';
@@ -95,6 +101,7 @@ export class AppComponent {
   errorMessage = '';
   isTransitioning = false;
   sidebarCollapsed = false;
+  showPaymentModal = false;
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -226,6 +233,32 @@ export class AppComponent {
   }
 
   onFinish(): void {
+    this.navigateTo('summary');
+  }
+
+  // Premium/Payment methods
+  onOpenPaymentModal(): void {
+    this.showPaymentModal = true;
+  }
+
+  onClosePaymentModal(): void {
+    this.showPaymentModal = false;
+  }
+
+  onPaymentComplete(result: PaymentResult): void {
+    this.showPaymentModal = false;
+    if (result.success) {
+      this.premium.activatePremium();
+      this.toast.success('Premium unlocked! Enjoy your full report.');
+      // If user was on score page waiting to see breakdown, navigate there
+      if (this.currentScreen === 'risk-score') {
+        this.navigateTo('risk-breakdown');
+      }
+    }
+  }
+
+  onContinueFree(): void {
+    // Allow user to continue with limited view
     this.navigateTo('summary');
   }
 
