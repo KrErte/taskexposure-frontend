@@ -15,21 +15,30 @@ limitations under the License.
 -->
 
 <div class="risk-score">
-  <div class="risk-score__score-display">
-    <span class="risk-score__percentage" [ngClass]="scoreColorClass">{{ score }}%</span>
-    <span class="risk-score__band" [ngClass]="bandColorClass">{{ scoreMeaning.label }}</span>
+  <div class="risk-score__gauge-section">
+    <app-animated-gauge
+      [targetScore]="score"
+      [animationDuration]="2000"
+      (animationComplete)="onAnimationComplete()">
+    </app-animated-gauge>
+
+    <div class="risk-score__band-label" [ngClass]="bandColorClass" [class.risk-score__band-label--visible]="showContext">
+      {{ scoreMeaning.label }}
+    </div>
   </div>
 
-  <h1 class="risk-score__headline">{{ copy.headline }}</h1>
+  <div class="risk-score__context" [class.risk-score__context--visible]="showContext">
+    <h1 class="risk-score__headline">{{ copy.headline }}</h1>
 
-  <div class="risk-score__meaning">
-    <p class="risk-score__meaning-text">{{ scoreMeaning.meaning }}</p>
-    <p class="risk-score__meaning-action">{{ scoreMeaning.action }}</p>
+    <div class="risk-score__meaning">
+      <p class="risk-score__meaning-text">{{ scoreMeaning.meaning }}</p>
+      <p class="risk-score__meaning-action">{{ scoreMeaning.action }}</p>
+    </div>
+
+    <p class="risk-score__disclaimer">{{ copy.disclaimer }}</p>
+
+    <button type="button" class="risk-score__cta" (click)="onContinue()">
+      {{ copy.cta.primary }}
+    </button>
   </div>
-
-  <p class="risk-score__disclaimer">{{ copy.disclaimer }}</p>
-
-  <button type="button" class="risk-score__cta" (click)="onContinue()">
-    {{ copy.cta.primary }}
-  </button>
 </div>

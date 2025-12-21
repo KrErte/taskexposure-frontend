@@ -337,7 +337,12 @@ export function getScoreMeaning(score: number): {
 }
 
 export function getSignalStrengthExplanation(
-  strength: 'Low' | 'Moderate' | 'High'
+  strength: 'low' | 'moderate' | 'high'
 ): string {
-  return ASSESSMENT_JUSTIFICATION_COPY.sections.signalStrength.explanation[strength];
+  const keyMap: Record<'low' | 'moderate' | 'high', 'Low' | 'Moderate' | 'High'> = {
+    low: 'Low',
+    moderate: 'Moderate',
+    high: 'High',
+  };
+  return ASSESSMENT_JUSTIFICATION_COPY.sections.signalStrength.explanation[keyMap[strength]];
 }

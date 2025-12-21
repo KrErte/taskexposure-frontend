@@ -15,40 +15,34 @@ limitations under the License.
 */
 
 .risk-score {
-  &__score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &__gauge-section {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin: 0 0 2rem 0;
+    align-items: center;
+    margin-bottom: 2rem;
   }
 
-  &__percentage {
-    font-size: 4rem;
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', monospace;
-    font-weight: 600;
-    line-height: 1;
-
-    &--low {
-      color: var(--color-low-risk);
-    }
-
-    &--medium {
-      color: var(--color-medium-risk);
-    }
-
-    &--high {
-      color: var(--color-high-risk);
-    }
-  }
-
-  &__band {
+  &__band-label {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     &--low {
       color: var(--color-low-risk);
@@ -66,6 +60,18 @@ limitations under the License.
     }
   }
 
+  &__context {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+    max-width: 500px;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   &__headline {
     font-size: 1.5rem;
     font-weight: 600;
@@ -79,6 +85,7 @@ limitations under the License.
     padding: 1.5rem;
     background-color: var(--color-surface);
     border-left: 3px solid var(--color-border);
+    text-align: left;
   }
 
   &__meaning-text {
@@ -99,7 +106,7 @@ limitations under the License.
   &__disclaimer {
     font-size: 0.875rem;
     line-height: 1.6;
-    margin: 0 0 3rem 0;
+    margin: 0 0 2rem 0;
     color: var(--color-text-secondary);
   }
 
@@ -112,9 +119,15 @@ limitations under the License.
     background-color: var(--color-accent);
     border: none;
     cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 
     &:hover {
       background-color: var(--color-accent-hover);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 }

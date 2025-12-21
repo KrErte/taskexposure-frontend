@@ -21,11 +21,12 @@ import {
   getExposureBand,
   getScoreMeaning,
 } from '../../shared/content/copy';
+import { AnimatedGaugeComponent } from '../../shared/components/animated-gauge/animated-gauge.component';
 
 @Component({
   selector: 'app-risk-score',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AnimatedGaugeComponent],
   templateUrl: './risk-score.component.html',
   styleUrl: './risk-score.component.scss',
 })
@@ -34,6 +35,7 @@ export class RiskScoreComponent {
   @Output() continue = new EventEmitter<void>();
 
   readonly copy = RISK_SCORE_COPY;
+  showContext: boolean = false;
 
   get scoreColorClass(): string {
     const band = getExposureBand(this.score);
@@ -49,6 +51,10 @@ export class RiskScoreComponent {
 
   get scoreMeaning(): { label: string; meaning: string; action: string } {
     return getScoreMeaning(this.score);
+  }
+
+  onAnimationComplete(): void {
+    this.showContext = true;
   }
 
   onContinue(): void {
