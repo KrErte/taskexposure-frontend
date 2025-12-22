@@ -521,5 +521,23 @@
       "deleteFailed": "Kirje kustutamine ebaõnnestus",
       "anchorFailed": "Kirje uuesti ankurdamine ebaõnnestus"
     }
+  },
+  "simulator": {
+    "title": "Mis siis, kui...",
+    "tabs": {
+      "skill": "Õpi oskus",
+      "aiCapability": "TI areng"
+    },
+    "currentExposure": "Sinu praegune mõju:",
+    "selectSkill": "Vali oskus simuleerimiseks:",
+    "selectAiCapability": "Vali TI võimekuse areng:",
+    "simulating": "Arvutan mõju...",
+    "resultTitle": "SIMULEERITUD TULEMUS",
+    "result": {
+      "ifLearn": "Kui õpid {{name}}...",
+      "ifAiGains": "Kui TI omandab {{name}}...",
+      "affectedTasks": "Mõjutatud ülesanded:"
+    },
+    "disclaimer": "See on simulatsioon, mis põhineb valdkonna mustritel"
   }
 }

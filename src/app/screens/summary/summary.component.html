@@ -93,6 +93,15 @@ limitations under the License.
     </div>
   </div>
 
+  <!-- What-If Simulator -->
+  <section class="summary__simulator">
+    <app-simulator
+      [sessionId]="sessionId ?? undefined"
+      [currentExposure]="riskScore"
+      [tasks]="tasks"
+    ></app-simulator>
+  </section>
+
   <!-- "If You Do Nothing vs If You Act" Scenario View -->
   <section class="summary__scenario">
     <button

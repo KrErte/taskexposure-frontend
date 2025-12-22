@@ -521,5 +521,23 @@
       "deleteFailed": "Failed to delete entry",
       "anchorFailed": "Failed to re-anchor entry"
     }
+  },
+  "simulator": {
+    "title": "What if...",
+    "tabs": {
+      "skill": "Learn a Skill",
+      "aiCapability": "AI Advances"
+    },
+    "currentExposure": "Your current exposure:",
+    "selectSkill": "Select a skill to simulate:",
+    "selectAiCapability": "Select an AI capability advancement:",
+    "simulating": "Calculating impact...",
+    "resultTitle": "SIMULATED RESULT",
+    "result": {
+      "ifLearn": "If you learn {{name}}...",
+      "ifAiGains": "If AI gains {{name}}...",
+      "affectedTasks": "Affected tasks:"
+    },
+    "disclaimer": "This is a simulation based on industry patterns"
   }
 }

@@ -19,12 +19,14 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
 import { KpiGridComponent, KpiItem } from '../../shared/components/kpi-grid/kpi-grid.component';
+import { SimulatorComponent } from '../../shared/components/simulator/simulator.component';
 import {
   PersonaArchetype,
   PERSONA_ARCHETYPES,
   derivePersonaArchetype,
 } from '../../shared/models/persona-archetype.model';
 import { CopyService } from '../../core/services/copy.service';
+import { SessionService } from '../../core/services/session.service';
 
 /**
  * 3.8 Summary Screen - "The Commitment"
@@ -41,12 +43,17 @@ import { CopyService } from '../../core/services/copy.service';
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [CommonModule, KpiGridComponent],
+  imports: [CommonModule, KpiGridComponent, SimulatorComponent],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.scss',
 })
 export class SummaryComponent {
   private copyService = inject(CopyService);
+  private sessionService = inject(SessionService);
+
+  get sessionId(): string | null {
+    return this.sessionService.sessionId;
+  }
 
   @Input() riskScore: number = 0;
   @Input() tasks: Task[] = [];

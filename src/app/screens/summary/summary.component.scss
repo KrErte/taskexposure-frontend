@@ -201,6 +201,11 @@ limitations under the License.
     color: var(--color-text-secondary);
   }
 
+  // What-If Simulator
+  &__simulator {
+    margin-bottom: 2rem;
+  }
+
   // Scenario View - "If You Do Nothing vs If You Act"
   &__scenario {
     margin-bottom: 2rem;
