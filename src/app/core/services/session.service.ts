@@ -16,6 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface SessionState {
   sessionId: string | null;
@@ -55,7 +56,7 @@ export class SessionService {
    */
   startSession(sessionId?: string): void {
     const newState: SessionState = {
-      sessionId: sessionId || this.generateSessionId(),
+      sessionId: this.normalizeSessionId(sessionId),
       analysisId: null,
       flowId: null,
       startedAt: new Date(),
@@ -110,7 +111,22 @@ export class SessionService {
   }
 
   private generateSessionId(): string {
-    return `te_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    return uuidv4();
+  }
+
+  /**
+   * Ensure the sessionId is a valid UUID; otherwise generate a new one.
+   */
+  private normalizeSessionId(candidate?: string | null): string {
+    if (candidate && this.isValidUuid(candidate)) {
+      return candidate;
+    }
+    return this.generateSessionId();
+  }
+
+  private isValidUuid(value: string): boolean {
+    // Simple UUID v4 pattern; rejects empty or malformed strings.
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
   }
 
   private loadFromStorage(): SessionState {
@@ -118,8 +134,10 @@ export class SessionService {
       const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
+        const sessionId = this.isValidUuid(parsed.sessionId) ? parsed.sessionId : null;
         return {
           ...parsed,
+          sessionId,
           startedAt: parsed.startedAt ? new Date(parsed.startedAt) : null,
         };
       }
