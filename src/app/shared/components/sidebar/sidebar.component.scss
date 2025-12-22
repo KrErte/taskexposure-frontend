@@ -53,6 +53,10 @@ limitations under the License.
       margin-right: 0;
     }
 
+    .sidebar__icon {
+      margin-right: 0;
+    }
+
     .sidebar__section {
       height: 1rem;
     }
@@ -238,6 +242,36 @@ limitations under the License.
     background: var(--color-rose);
     color: white;
     border-radius: 10px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  &__section--tools {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: 1rem;
+  }
+
+  &__list--tools {
+    .sidebar__link--tool {
+      &.sidebar__link--active {
+        background: var(--color-accent-glow);
+        color: var(--color-accent);
+
+        .sidebar__icon {
+          color: var(--color-accent);
+        }
+      }
+    }
   }
 
   &__footer {

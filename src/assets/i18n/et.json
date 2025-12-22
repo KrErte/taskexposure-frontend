@@ -420,5 +420,86 @@
       "upgrade": "Täienda kohe",
       "continueFree": "Jätka tasuta versiooniga"
     }
+  },
+  "evidenceLog": {
+    "title": "Tõendite logi",
+    "subtitle": "Koht kohanemishetkede salvestamiseks. Ei survet, ei triipe—lihtsalt vaikne kirje sellest, mis sinu töös muutub.",
+    "nav": "Tõendite logi",
+    "quickAdd": {
+      "title": "Jäädvusta hetk",
+      "placeholder": "Millist kohanemist märkasid? (5-120 tähemärki)",
+      "save": "Salvesta",
+      "moreOptions": "Rohkem valikuid",
+      "lessOptions": "Vähem valikuid"
+    },
+    "form": {
+      "title": "Pealkiri",
+      "notes": "Märkmed",
+      "notesPlaceholder": "Lisa täiendav kontekst või mõtisklused...",
+      "tags": "Sildid",
+      "tagsPlaceholder": "Kirjuta ja vajuta Enter lisamiseks",
+      "tagsHint": "Kuni 5 silti, igaüks 2-24 tähemärki",
+      "impact": "Mõju"
+    },
+    "validation": {
+      "titleRequired": "Pealkiri on kohustuslik",
+      "titleMinLength": "Pealkiri peab olema vähemalt 5 tähemärki",
+      "titleMaxLength": "Pealkiri peab olema kuni 120 tähemärki",
+      "notesMaxLength": "Märkmed peavad olema kuni 1000 tähemärki"
+    },
+    "impact": {
+      "low": "Madal",
+      "medium": "Keskmine",
+      "high": "Kõrge"
+    },
+    "filters": {
+      "searchPlaceholder": "Otsi kirjeid...",
+      "impactAll": "Kõik mõjud",
+      "timeAll": "Kogu aeg",
+      "last7Days": "Viimased 7 päeva",
+      "last30Days": "Viimased 30 päeva",
+      "tags": "Sildid",
+      "clearAll": "Tühista filtrid"
+    },
+    "entry": {
+      "showMore": "Näita rohkem",
+      "showLess": "Näita vähem"
+    },
+    "actions": {
+      "edit": "Muuda",
+      "delete": "Kustuta"
+    },
+    "edit": {
+      "title": "Muuda kirjet",
+      "save": "Salvesta muudatused"
+    },
+    "delete": {
+      "title": "Kustuta kirje",
+      "confirmation": "Kas oled kindel, et soovid selle kirje kustutada? Seda toimingut ei saa tagasi võtta.",
+      "confirm": "Kustuta"
+    },
+    "empty": {
+      "title": "Kirjeid veel pole",
+      "description": "Alusta oma kohanemishetkede jäädvustamist. Pole õiget ega valet—lihtsalt pane kirja, mida märkad.",
+      "noResults": "Sobivaid kirjeid ei leitud",
+      "tryDifferentFilters": "Proovi filtreid kohandada, et näha rohkem kirjeid."
+    },
+    "insights": {
+      "title": "See kuu",
+      "totalEntries": "Kirjeid kokku (30 päeva)",
+      "topTags": "Populaarsemad sildid",
+      "byImpact": "Mõju järgi"
+    },
+    "messages": {
+      "saved": "Kirje salvestatud",
+      "updated": "Kirje uuendatud",
+      "deleted": "Kirje kustutatud"
+    },
+    "errors": {
+      "loadFailed": "Kirjete laadimine ebaõnnestus",
+      "saveFailed": "Kirje salvestamine ebaõnnestus",
+      "updateFailed": "Kirje uuendamine ebaõnnestus",
+      "deleteFailed": "Kirje kustutamine ebaõnnestus"
+    }
   }
 }

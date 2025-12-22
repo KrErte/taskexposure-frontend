@@ -31,6 +31,7 @@ import { RiskScoreComponent } from './screens/risk-score/risk-score.component';
 import { RiskBreakdownComponent } from './screens/risk-breakdown/risk-breakdown.component';
 import { RoadmapComponent } from './screens/roadmap/roadmap.component';
 import { SummaryComponent } from './screens/summary/summary.component';
+import { EvidenceLogComponent } from './screens/evidence-log/evidence-log.component';
 import { RiskApiService } from './core/services/risk-api.service';
 import { SessionService } from './core/services/session.service';
 import { PremiumService } from './core/services/premium.service';
@@ -56,7 +57,8 @@ type ScreenId =
   | 'risk-score'
   | 'risk-breakdown'
   | 'roadmap'
-  | 'summary';
+  | 'summary'
+  | 'evidence-log';
 
 @Component({
   selector: 'app-root',
@@ -85,6 +87,7 @@ type ScreenId =
     RiskBreakdownComponent,
     RoadmapComponent,
     SummaryComponent,
+    EvidenceLogComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

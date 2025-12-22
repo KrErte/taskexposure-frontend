@@ -17,4 +17,8 @@
 export const environment = {
   production: true,
   apiUrl: '/api',
+  evidenceLog: {
+    /** Storage mode: 'local' uses localStorage, 'http' uses REST API */
+    mode: 'local' as 'local' | 'http',
+  },
 };

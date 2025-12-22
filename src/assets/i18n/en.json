@@ -420,5 +420,86 @@
       "upgrade": "Upgrade Now",
       "continueFree": "Continue with free version"
     }
+  },
+  "evidenceLog": {
+    "title": "Evidence Log",
+    "subtitle": "A place to record moments of adaptation. No pressure, no streaks—just a quiet record of what's changing in your work.",
+    "nav": "Evidence Log",
+    "quickAdd": {
+      "title": "Capture a moment",
+      "placeholder": "What adaptation did you notice? (5-120 characters)",
+      "save": "Save",
+      "moreOptions": "More options",
+      "lessOptions": "Less options"
+    },
+    "form": {
+      "title": "Title",
+      "notes": "Notes",
+      "notesPlaceholder": "Add any additional context or reflections...",
+      "tags": "Tags",
+      "tagsPlaceholder": "Type and press Enter to add",
+      "tagsHint": "Up to 5 tags, each 2-24 characters",
+      "impact": "Impact"
+    },
+    "validation": {
+      "titleRequired": "Title is required",
+      "titleMinLength": "Title must be at least 5 characters",
+      "titleMaxLength": "Title must be 120 characters or less",
+      "notesMaxLength": "Notes must be 1000 characters or less"
+    },
+    "impact": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "filters": {
+      "searchPlaceholder": "Search entries...",
+      "impactAll": "All impacts",
+      "timeAll": "All time",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "tags": "Tags",
+      "clearAll": "Clear filters"
+    },
+    "entry": {
+      "showMore": "Show more",
+      "showLess": "Show less"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "edit": {
+      "title": "Edit entry",
+      "save": "Save changes"
+    },
+    "delete": {
+      "title": "Delete entry",
+      "confirmation": "Are you sure you want to delete this entry? This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "empty": {
+      "title": "No entries yet",
+      "description": "Start capturing your moments of adaptation. There's no right or wrong—just record what you notice.",
+      "noResults": "No matching entries",
+      "tryDifferentFilters": "Try adjusting your filters to see more entries."
+    },
+    "insights": {
+      "title": "This month",
+      "totalEntries": "Total entries (30 days)",
+      "topTags": "Top tags",
+      "byImpact": "By impact"
+    },
+    "messages": {
+      "saved": "Entry saved",
+      "updated": "Entry updated",
+      "deleted": "Entry deleted"
+    },
+    "errors": {
+      "loadFailed": "Failed to load entries",
+      "saveFailed": "Failed to save entry",
+      "updateFailed": "Failed to update entry",
+      "deleteFailed": "Failed to delete entry"
+    }
   }
 }

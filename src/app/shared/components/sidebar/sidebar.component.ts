@@ -49,6 +49,10 @@ export class SidebarComponent {
     { id: 'summary', label: 'Summary', icon: 'summarize' },
   ];
 
+  toolItems: NavItem[] = [
+    { id: 'evidence-log', label: 'Evidence Log', icon: 'note_add' },
+  ];
+
   onNavigate(id: string): void {
     this.navigate.emit(id);
   }
