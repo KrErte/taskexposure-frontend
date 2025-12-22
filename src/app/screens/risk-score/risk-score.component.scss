@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// 3.5 Score Screen - "The Mirror Moment"
+// Deliver the exposure score with emotional intelligence.
+// Frame numbers as starting points, not verdicts.
+
 .risk-score {
   display: flex;
   flex-direction: column;
@@ -44,6 +48,28 @@ limitations under the License.
       transform: translateY(0);
     }
 
+    // New four-band system
+    &--protected {
+      color: var(--color-low-risk);
+      background-color: rgba(74, 222, 128, 0.15);
+    }
+
+    &--mixed {
+      color: var(--color-medium-risk);
+      background-color: rgba(251, 191, 36, 0.15);
+    }
+
+    &--exposed {
+      color: #f97316; // orange
+      background-color: rgba(249, 115, 22, 0.15);
+    }
+
+    &--critical {
+      color: var(--color-high-risk);
+      background-color: rgba(248, 113, 113, 0.15);
+    }
+
+    // Legacy classes for backwards compatibility
     &--low {
       color: var(--color-low-risk);
       background-color: rgba(74, 222, 128, 0.15);
@@ -81,10 +107,27 @@ limitations under the License.
   }
 
   &__meaning {
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     padding: 1.5rem;
     text-align: left;
     border-radius: 12px;
+
+    // Band-specific styling
+    &--protected {
+      border-left: 3px solid var(--color-low-risk);
+    }
+
+    &--mixed {
+      border-left: 3px solid var(--color-medium-risk);
+    }
+
+    &--exposed {
+      border-left: 3px solid #f97316;
+    }
+
+    &--critical {
+      border-left: 3px solid var(--color-high-risk);
+    }
   }
 
   &__meaning-text {
@@ -102,6 +145,19 @@ limitations under the License.
     font-weight: 500;
   }
 
+  // Killer sentence - "This isn't a verdict. It's a lens."
+  &__killer-sentence {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+    color: var(--color-accent);
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--color-accent);
+    background-color: rgba(96, 165, 250, 0.05);
+    text-align: left;
+  }
+
   &__disclaimer {
     font-size: 0.875rem;
     line-height: 1.6;
@@ -110,7 +166,9 @@ limitations under the License.
   }
 
   &__cta {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 1rem 2rem;
     font-size: 1rem;
     font-weight: 500;
@@ -130,13 +188,21 @@ limitations under the License.
     }
   }
 
+  &__cta-arrow {
+    transition: transform 0.2s ease;
+
+    .risk-score__cta:hover & {
+      transform: translateX(4px);
+    }
+  }
+
   &__upgrade-section {
     margin-top: 1rem;
     width: 100%;
     max-width: 480px;
   }
 
-  // Risk Reduction Potential teaser - the "control" moment
+  // Risk Reduction Potential teaser - the "agency" moment
   &__reduction-teaser {
     background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
     border: 1px solid rgba(74, 222, 128, 0.2);
@@ -222,6 +288,25 @@ limitations under the License.
 
     svg {
       opacity: 0.7;
+    }
+  }
+
+  // Percentage color classes for gauge
+  &__percentage {
+    &--protected {
+      color: var(--color-low-risk);
+    }
+
+    &--mixed {
+      color: var(--color-medium-risk);
+    }
+
+    &--exposed {
+      color: #f97316;
+    }
+
+    &--critical {
+      color: var(--color-high-risk);
     }
   }
 }

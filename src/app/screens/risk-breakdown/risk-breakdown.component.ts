@@ -18,9 +18,26 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
-import { RadarChartComponent, RadarDataPoint } from '../../shared/components/radar-chart/radar-chart.component';
+import {
+  RadarChartComponent,
+  RadarDataPoint,
+} from '../../shared/components/radar-chart/radar-chart.component';
 import { ScoreBarComponent } from '../../shared/components/score-bar/score-bar.component';
+import {
+  TaskCategory,
+  TASK_CATEGORIES,
+  mapExposureToCategory,
+} from '../../shared/models/persona-archetype.model';
 
+/**
+ * 3.6 Breakdown Screen - "The Anatomy"
+ *
+ * PURPOSE: Show exactly which tasks drive exposure and why.
+ * Introduce the three-category framework:
+ * - AUTOMATED: AI already does this reliably. Task likely disappears within 1-3 years.
+ * - AI-ASSISTED: AI does heavy lifting, human oversight needed.
+ * - HUMAN MOAT: Requires trust, accountability, or ambiguity AI cannot handle.
+ */
 @Component({
   selector: 'app-risk-breakdown',
   standalone: true,
@@ -33,19 +50,32 @@ export class RiskBreakdownComponent {
   @Output() continue = new EventEmitter<void>();
 
   readonly copy = RISK_BREAKDOWN_COPY;
+  readonly taskCategories = TASK_CATEGORIES;
   expandedTaskIndex: number | null = null;
 
   get radarData(): RadarDataPoint[] {
-    // Create capability categories based on task analysis
+    // Create signal-based radar showing exposure patterns
     return [
-      { label: 'Routine', value: this.getRoutineExposure() },
-      { label: 'Analysis', value: this.getAnalysisExposure() },
-      { label: 'Creative', value: this.getCreativeExposure() },
-      { label: 'Social', value: this.getSocialExposure() },
-      { label: 'Physical', value: this.getPhysicalExposure() },
+      { label: 'Routine Density', value: this.getRoutineExposure() },
+      { label: 'Decision Ambiguity', value: 100 - this.getAmbiguityScore() },
+      { label: 'Trust Dependency', value: 100 - this.getTrustScore() },
+      { label: 'Orchestration', value: 100 - this.getOrchestrationScore() },
+      { label: 'Accountability', value: 100 - this.getAccountabilityScore() },
     ];
   }
 
+  /**
+   * Summary by task category (the new framework)
+   */
+  get categorySummary(): { automated: number; aiAssisted: number; humanMoat: number } {
+    return {
+      automated: this.tasks.filter((t) => t.exposure === 'high').length,
+      aiAssisted: this.tasks.filter((t) => t.exposure === 'medium').length,
+      humanMoat: this.tasks.filter((t) => t.exposure === 'low').length,
+    };
+  }
+
+  // Legacy getter for backwards compatibility
   get exposureSummary(): { high: number; medium: number; low: number } {
     return {
       high: this.tasks.filter((t) => t.exposure === 'high').length,
@@ -59,22 +89,39 @@ export class RiskBreakdownComponent {
     return Math.min(100, (highCount / Math.max(this.tasks.length, 1)) * 150);
   }
 
-  private getAnalysisExposure(): number {
-    const mediumCount = this.tasks.filter((t) => t.exposure === 'medium').length;
-    return Math.min(100, 40 + (mediumCount / Math.max(this.tasks.length, 1)) * 80);
-  }
-
-  private getCreativeExposure(): number {
+  private getAmbiguityScore(): number {
     const lowCount = this.tasks.filter((t) => t.exposure === 'low').length;
-    return Math.max(10, 30 - (lowCount / Math.max(this.tasks.length, 1)) * 40);
+    return Math.min(100, 30 + (lowCount / Math.max(this.tasks.length, 1)) * 70);
   }
 
-  private getSocialExposure(): number {
-    return Math.max(15, Math.random() * 35 + 15);
+  private getTrustScore(): number {
+    const lowCount = this.tasks.filter((t) => t.exposure === 'low').length;
+    return Math.min(100, 25 + (lowCount / Math.max(this.tasks.length, 1)) * 60);
   }
 
-  private getPhysicalExposure(): number {
-    return Math.max(10, Math.random() * 25 + 10);
+  private getOrchestrationScore(): number {
+    const mediumCount = this.tasks.filter((t) => t.exposure === 'medium').length;
+    return Math.min(100, 35 + (mediumCount / Math.max(this.tasks.length, 1)) * 50);
+  }
+
+  private getAccountabilityScore(): number {
+    const lowCount = this.tasks.filter((t) => t.exposure === 'low').length;
+    return Math.min(100, 40 + (lowCount / Math.max(this.tasks.length, 1)) * 45);
+  }
+
+  /**
+   * Get the task category for a given exposure level
+   */
+  getTaskCategory(exposure: Task['exposure']): TaskCategory {
+    return mapExposureToCategory(exposure);
+  }
+
+  /**
+   * Get category info for display
+   */
+  getCategoryInfo(exposure: Task['exposure']) {
+    const category = this.getTaskCategory(exposure);
+    return this.taskCategories[category];
   }
 
   getExposureClass(exposure: Task['exposure']): string {

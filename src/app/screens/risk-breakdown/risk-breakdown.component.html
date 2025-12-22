@@ -14,37 +14,51 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- 3.6 Breakdown Screen - "The Anatomy" -->
 <div class="risk-breakdown">
   <header class="risk-breakdown__header">
     <h1 class="risk-breakdown__headline">{{ copy.headline }}</h1>
     <p class="risk-breakdown__subheadline">{{ copy.subheadline }}</p>
   </header>
 
-  <!-- Summary Cards -->
+  <!-- Task Category Summary Cards (New Framework) -->
   <div class="risk-breakdown__summary">
+    <!-- Automated (high exposure) -->
     <div class="glass-card glass-card--rose risk-breakdown__summary-card">
-      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--high">{{ exposureSummary.high }}</span>
-      <span class="risk-breakdown__summary-label">High exposure</span>
-      <app-score-bar [value]="exposureSummary.high" [max]="tasks.length || 1" [segments]="5" color="high"></app-score-bar>
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--high">{{ categorySummary.automated }}</span>
+      <span class="risk-breakdown__summary-label">{{ copy.taskCategories.automated.label }}</span>
+      <p class="risk-breakdown__summary-desc">{{ copy.taskCategories.automated.action }}</p>
+      <app-score-bar [value]="categorySummary.automated" [max]="tasks.length || 1" [segments]="5" color="high"></app-score-bar>
     </div>
+
+    <!-- AI-Assisted (medium exposure) -->
     <div class="glass-card glass-card--amber risk-breakdown__summary-card">
-      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--medium">{{ exposureSummary.medium }}</span>
-      <span class="risk-breakdown__summary-label">Moderate</span>
-      <app-score-bar [value]="exposureSummary.medium" [max]="tasks.length || 1" [segments]="5" color="medium"></app-score-bar>
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--medium">{{ categorySummary.aiAssisted }}</span>
+      <span class="risk-breakdown__summary-label">{{ copy.taskCategories.aiAssisted.label }}</span>
+      <p class="risk-breakdown__summary-desc">{{ copy.taskCategories.aiAssisted.action }}</p>
+      <app-score-bar [value]="categorySummary.aiAssisted" [max]="tasks.length || 1" [segments]="5" color="medium"></app-score-bar>
     </div>
+
+    <!-- Human Moat (low exposure) -->
     <div class="glass-card glass-card--emerald risk-breakdown__summary-card">
-      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--low">{{ exposureSummary.low }}</span>
-      <span class="risk-breakdown__summary-label">Low exposure</span>
-      <app-score-bar [value]="exposureSummary.low" [max]="tasks.length || 1" [segments]="5" color="low"></app-score-bar>
+      <span class="risk-breakdown__summary-count risk-breakdown__summary-count--low">{{ categorySummary.humanMoat }}</span>
+      <span class="risk-breakdown__summary-label">{{ copy.taskCategories.humanMoat.label }}</span>
+      <p class="risk-breakdown__summary-desc">{{ copy.taskCategories.humanMoat.action }}</p>
+      <app-score-bar [value]="categorySummary.humanMoat" [max]="tasks.length || 1" [segments]="5" color="low"></app-score-bar>
     </div>
   </div>
 
-  <!-- Radar Chart -->
+  <!-- Killer Sentence -->
+  <p class="risk-breakdown__killer-sentence" *ngIf="copy.killerSentence">
+    {{ copy.killerSentence }}
+  </p>
+
+  <!-- Signal Profile Radar Chart -->
   <div class="glass-card risk-breakdown__chart-section" *ngIf="tasks.length >= 3">
-    <h2 class="risk-breakdown__section-title">AI Capability Overlap</h2>
+    <h2 class="risk-breakdown__section-title">Signal Profile</h2>
     <app-radar-chart [data]="radarData" [size]="250"></app-radar-chart>
     <p class="risk-breakdown__chart-caption">
-      Higher values indicate greater overlap with current AI capabilities
+      Higher values indicate greater overlap with AI capabilities. Lower is better.
     </p>
   </div>
 
@@ -86,9 +100,20 @@ limitations under the License.
         ></app-score-bar>
       </div>
 
-      <!-- Expanded content -->
+      <!-- Expanded content with category framework -->
       <div class="risk-breakdown__task-details" *ngIf="expandedTaskIndex === i">
         <p class="risk-breakdown__task-reason">{{ task.reason }}</p>
+
+        <!-- Category info -->
+        <div class="risk-breakdown__task-category">
+          <span class="risk-breakdown__category-label" [ngClass]="'risk-breakdown__category-label--' + task.exposure">
+            {{ getCategoryInfo(task.exposure).label }}
+          </span>
+          <span class="risk-breakdown__category-meaning">
+            {{ getCategoryInfo(task.exposure).meaning }}
+          </span>
+        </div>
+
         <div class="risk-breakdown__task-insight">
           <span class="risk-breakdown__insight-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -96,7 +121,7 @@ limitations under the License.
             </svg>
           </span>
           <span class="risk-breakdown__insight-text">
-            {{ copy.exposureDescriptors[task.exposure] }}
+            <strong>Action:</strong> {{ copy.exposureDescriptors[task.exposure] }}
           </span>
         </div>
       </div>

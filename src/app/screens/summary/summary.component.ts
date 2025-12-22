@@ -18,9 +18,26 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
-import { SUMMARY_COPY } from '../../shared/content/copy';
+import { SUMMARY_COPY, SCENARIO_COPY, getExposureBand } from '../../shared/content/copy';
 import { KpiGridComponent, KpiItem } from '../../shared/components/kpi-grid/kpi-grid.component';
+import {
+  PersonaArchetype,
+  PERSONA_ARCHETYPES,
+  derivePersonaArchetype,
+} from '../../shared/models/persona-archetype.model';
 
+/**
+ * 3.8 Summary Screen - "The Commitment"
+ *
+ * PURPOSE: Close the loop. Provide portable summary.
+ * Enable commitment tracking. Set up for return visits.
+ *
+ * Includes:
+ * - Persona archetype display
+ * - Committed actions summary
+ * - "If you do nothing vs If you act" scenario
+ * - Downloadable report
+ */
 @Component({
   selector: 'app-summary',
   standalone: true,
@@ -32,8 +49,24 @@ export class SummaryComponent {
   @Input() riskScore: number = 0;
   @Input() tasks: Task[] = [];
   @Input() topAction: RoadmapAction | undefined;
+  @Input() committedActions: RoadmapAction[] = [];
 
   readonly copy = SUMMARY_COPY;
+  readonly scenarioCopy = SCENARIO_COPY;
+  showScenario: boolean = false;
+
+  /**
+   * Get the user's perceived future role archetype.
+   * TODO: Backend should provide this based on signal analysis.
+   */
+  get personaArchetype(): PersonaArchetype {
+    const archetypeId = derivePersonaArchetype(this.riskScore);
+    return PERSONA_ARCHETYPES[archetypeId];
+  }
+
+  get exposureBand(): string {
+    return getExposureBand(this.riskScore);
+  }
 
   get kpiItems(): KpiItem[] {
     return [
@@ -45,13 +78,13 @@ export class SummaryComponent {
         icon: 'target',
       },
       {
-        label: 'High Risk Tasks',
+        label: 'Automated Tasks',
         value: this.highExposureTasks.length,
         color: 'rose',
         icon: 'zap',
       },
       {
-        label: 'Low Risk Tasks',
+        label: 'Human Moats',
         value: this.lowExposureTasks.length,
         color: 'emerald',
         icon: 'shield',
@@ -63,14 +96,14 @@ export class SummaryComponent {
         icon: 'chart',
       },
       {
-        label: 'Medium Risk',
+        label: 'AI-Assisted',
         value: this.mediumExposureTasks.length,
         color: 'amber',
         icon: 'clock',
       },
       {
-        label: 'Actions',
-        value: this.topAction ? '1+' : '0',
+        label: 'Committed Actions',
+        value: this.committedActions.length,
         color: 'purple',
         icon: 'users',
       },
@@ -101,6 +134,10 @@ export class SummaryComponent {
     return this.tasks.filter((t) => t.exposure === 'medium');
   }
 
+  toggleScenario(): void {
+    this.showScenario = !this.showScenario;
+  }
+
   downloadReport(): void {
     const reportContent = this.generateReportText();
     const blob = new Blob([reportContent], { type: 'text/plain' });
@@ -115,10 +152,16 @@ export class SummaryComponent {
   private generateReportText(): string {
     let report = 'TASKEXPOSURE Assessment Report\n';
     report += '================================\n\n';
-    report += `${this.copy.sections.score}: ${this.riskScore}%\n\n`;
+    report += `${this.copy.sections.score}: ${this.riskScore}%\n`;
+    report += `Band: ${this.exposureBand.toUpperCase()}\n\n`;
+
+    // Archetype
+    report += `${this.copy.sections.archetype}:\n`;
+    report += `${this.personaArchetype.name}\n`;
+    report += `${this.personaArchetype.description}\n\n`;
 
     if (this.highExposureTasks.length > 0) {
-      report += `${this.copy.sections.highExposure}:\n`;
+      report += `${this.copy.sections.highExposure} (AUTOMATED):\n`;
       this.highExposureTasks.forEach((t) => {
         report += `- ${t.description}\n`;
       });
@@ -126,20 +169,28 @@ export class SummaryComponent {
     }
 
     if (this.lowExposureTasks.length > 0) {
-      report += `${this.copy.sections.lowExposure}:\n`;
+      report += `${this.copy.sections.lowExposure} (HUMAN MOATS):\n`;
       this.lowExposureTasks.forEach((t) => {
         report += `- ${t.description}\n`;
       });
       report += '\n';
     }
 
-    if (this.topAction) {
+    if (this.committedActions.length > 0) {
+      report += `${this.copy.sections.committedActions}:\n`;
+      this.committedActions.forEach((a, i) => {
+        report += `${i + 1}. ${a.description}\n`;
+      });
+      report += '\n';
+    } else if (this.topAction) {
       report += `${this.copy.sections.topAction}:\n`;
       report += `${this.topAction.description}\n`;
-      report += `${this.topAction.explanation ?? this.topAction.mechanism}\n`;
+      report += `${this.topAction.explanation ?? this.topAction.mechanism}\n\n`;
     }
 
-    report += `${this.copy.nextSteps}\n`;
+    report += '---\n\n';
+    report += `${this.copy.nextSteps}\n\n`;
+    report += `${this.copy.returnPrompt}\n`;
 
     return report;
   }

@@ -18,6 +18,14 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENTRY_COPY } from '../../shared/content/copy';
 
+/**
+ * 3.1 Start Screen - "The Mirror"
+ *
+ * PURPOSE: Establish credibility, differentiate from fear-based tools,
+ * invite self-reflection rather than passive consumption.
+ *
+ * EMOTIONAL STATE: Curious but guarded. User expects another doomsday calculator.
+ */
 @Component({
   selector: 'app-entry',
   standalone: true,
@@ -29,6 +37,9 @@ export class EntryComponent {
   @Output() begin = new EventEmitter<void>();
 
   readonly copy = ENTRY_COPY;
+
+  // Colors for the differentiator feature cards
+  readonly featureColors = ['accent', 'purple', 'emerald'];
 
   onBegin(): void {
     this.begin.emit();

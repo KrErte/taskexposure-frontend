@@ -121,12 +121,44 @@ limitations under the License.
   &__subheadline {
     font-size: 1.125rem;
     line-height: 1.7;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     color: var(--color-text-secondary);
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     animation: fade-in-up 0.6s ease-out 0.2s both;
+  }
+
+  &__body {
+    margin: 0 0 1.5rem 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fade-in-up 0.6s ease-out 0.25s both;
+
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  // Killer sentence - the memorable line for each screen
+  &__killer-sentence {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 2rem 0;
+    color: var(--color-accent);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fade-in-up 0.6s ease-out 0.28s both;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid var(--color-accent);
+    background-color: rgba(96, 165, 250, 0.05);
+    text-align: left;
   }
 
   &__cta-group {
