@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
-import { SUMMARY_COPY, SCENARIO_COPY, getExposureBand } from '../../shared/content/copy';
 import { KpiGridComponent, KpiItem } from '../../shared/components/kpi-grid/kpi-grid.component';
 import {
   PersonaArchetype,
   PERSONA_ARCHETYPES,
   derivePersonaArchetype,
 } from '../../shared/models/persona-archetype.model';
+import { CopyService } from '../../core/services/copy.service';
 
 /**
  * 3.8 Summary Screen - "The Commitment"
@@ -46,13 +46,19 @@ import {
   styleUrl: './summary.component.scss',
 })
 export class SummaryComponent {
+  private copyService = inject(CopyService);
+
   @Input() riskScore: number = 0;
   @Input() tasks: Task[] = [];
   @Input() topAction: RoadmapAction | undefined;
   @Input() committedActions: RoadmapAction[] = [];
 
-  readonly copy = SUMMARY_COPY;
-  readonly scenarioCopy = SCENARIO_COPY;
+  get copy() {
+    return this.copyService.summaryCopy;
+  }
+  get scenarioCopy() {
+    return this.copyService.scenarioCopy;
+  }
   showScenario: boolean = false;
 
   /**
@@ -65,7 +71,7 @@ export class SummaryComponent {
   }
 
   get exposureBand(): string {
-    return getExposureBand(this.riskScore);
+    return this.copyService.getExposureBand(this.riskScore);
   }
 
   get kpiItems(): KpiItem[] {

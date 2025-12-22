@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ENTRY_COPY } from '../../shared/content/copy';
+import { CopyService } from '../../core/services/copy.service';
 
 /**
  * 3.1 Start Screen - "The Mirror"
@@ -34,9 +34,12 @@ import { ENTRY_COPY } from '../../shared/content/copy';
   styleUrl: './entry.component.scss',
 })
 export class EntryComponent {
+  private copyService = inject(CopyService);
   @Output() begin = new EventEmitter<void>();
 
-  readonly copy = ENTRY_COPY;
+  get copy() {
+    return this.copyService.entryCopy;
+  }
 
   // Colors for the differentiator feature cards
   readonly featureColors = ['accent', 'purple', 'emerald'];

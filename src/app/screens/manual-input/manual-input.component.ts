@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MANUAL_INPUT_COPY } from '../../shared/content/copy';
+import { CopyService } from '../../core/services/copy.service';
 
 @Component({
   selector: 'app-manual-input',
@@ -27,10 +27,14 @@ import { MANUAL_INPUT_COPY } from '../../shared/content/copy';
   styleUrl: './manual-input.component.scss',
 })
 export class ManualInputComponent {
+  private copyService = inject(CopyService);
+
   @Input() isLoading = false;
   @Output() tasksSubmitted = new EventEmitter<string[]>();
 
-  readonly copy = MANUAL_INPUT_COPY;
+  get copy() {
+    return this.copyService.manualInputCopy;
+  }
 
   tasks: string[] = [];
   currentTask: string = '';

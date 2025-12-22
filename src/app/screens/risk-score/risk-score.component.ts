@@ -16,15 +16,11 @@
 
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  RISK_SCORE_COPY,
-  getExposureBand,
-  getScoreMeaning,
-  ExposureBand,
-} from '../../shared/content/copy';
+import { ExposureBand } from '../../shared/content/copy';
 import { AnimatedGaugeComponent } from '../../shared/components/animated-gauge/animated-gauge.component';
 import { UpgradeCtaComponent } from '../../shared/components/upgrade-cta/upgrade-cta.component';
 import { PremiumService } from '../../core/services/premium.service';
+import { CopyService } from '../../core/services/copy.service';
 
 /**
  * 3.5 Score Screen - "The Mirror Moment"
@@ -47,16 +43,19 @@ import { PremiumService } from '../../core/services/premium.service';
 })
 export class RiskScoreComponent {
   readonly premium = inject(PremiumService);
+  private copyService = inject(CopyService);
 
   @Input() score: number = 0;
   @Output() continue = new EventEmitter<void>();
   @Output() upgrade = new EventEmitter<void>();
 
-  readonly copy = RISK_SCORE_COPY;
+  get copy() {
+    return this.copyService.riskScoreCopy;
+  }
   showContext: boolean = false;
 
   get exposureBand(): ExposureBand {
-    return getExposureBand(this.score);
+    return this.copyService.getExposureBand(this.score);
   }
 
   get scoreColorClass(): string {
@@ -75,7 +74,7 @@ export class RiskScoreComponent {
   }
 
   get scoreMeaning(): { label: string; meaning: string; action: string } {
-    return getScoreMeaning(this.score);
+    return this.copyService.getScoreMeaning(this.score);
   }
 
   /**

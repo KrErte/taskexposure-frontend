@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../shared/models/task.model';
-import { RISK_BREAKDOWN_COPY } from '../../shared/content/copy';
 import {
   RadarChartComponent,
   RadarDataPoint,
@@ -28,6 +27,7 @@ import {
   TASK_CATEGORIES,
   mapExposureToCategory,
 } from '../../shared/models/persona-archetype.model';
+import { CopyService } from '../../core/services/copy.service';
 
 /**
  * 3.6 Breakdown Screen - "The Anatomy"
@@ -46,10 +46,14 @@ import {
   styleUrl: './risk-breakdown.component.scss',
 })
 export class RiskBreakdownComponent {
+  private copyService = inject(CopyService);
+
   @Input() tasks: Task[] = [];
   @Output() continue = new EventEmitter<void>();
 
-  readonly copy = RISK_BREAKDOWN_COPY;
+  get copy() {
+    return this.copyService.riskBreakdownCopy;
+  }
   readonly taskCategories = TASK_CATEGORIES;
   expandedTaskIndex: number | null = null;
 

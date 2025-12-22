@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Task } from '../../shared/models/task.model';
-import { CLARIFYING_QUESTIONS_COPY } from '../../shared/content/copy';
 import { ClarifyingQuestion as ApiClarifyingQuestion } from '../../core/models/risk-api.models';
+import { CopyService } from '../../core/services/copy.service';
 
 
 
@@ -40,12 +40,16 @@ interface LocalClarifyingQuestion {
   styleUrl: './clarifying-questions.component.scss',
 })
 export class ClarifyingQuestionsComponent implements OnInit, OnChanges {
+  private copyService = inject(CopyService);
+
   @Input() tasks: Task[] = [];
   @Input() apiQuestions: ApiClarifyingQuestion[] = [];
   @Input() isLoading = false;
   @Output() complete = new EventEmitter<Map<string, string>>();
 
-  readonly copy = CLARIFYING_QUESTIONS_COPY;
+  get copy() {
+    return this.copyService.clarifyingQuestionsCopy;
+  }
 
   questions: LocalClarifyingQuestion[] = [];
   currentQuestionIndex: number = 0;
