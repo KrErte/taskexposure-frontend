@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   RISK_SCORE_COPY,
@@ -22,17 +22,22 @@ import {
   getScoreMeaning,
 } from '../../shared/content/copy';
 import { AnimatedGaugeComponent } from '../../shared/components/animated-gauge/animated-gauge.component';
+import { UpgradeCtaComponent } from '../../shared/components/upgrade-cta/upgrade-cta.component';
+import { PremiumService } from '../../core/services/premium.service';
 
 @Component({
   selector: 'app-risk-score',
   standalone: true,
-  imports: [CommonModule, AnimatedGaugeComponent],
+  imports: [CommonModule, AnimatedGaugeComponent, UpgradeCtaComponent],
   templateUrl: './risk-score.component.html',
   styleUrl: './risk-score.component.scss',
 })
 export class RiskScoreComponent {
+  readonly premium = inject(PremiumService);
+
   @Input() score: number = 0;
   @Output() continue = new EventEmitter<void>();
+  @Output() upgrade = new EventEmitter<void>();
 
   readonly copy = RISK_SCORE_COPY;
   showContext: boolean = false;
@@ -53,11 +58,34 @@ export class RiskScoreComponent {
     return getScoreMeaning(this.score);
   }
 
+  /**
+   * Calculate potential reduced score (40-55% reduction based on actions)
+   * This creates the "control" feeling GPT mentioned
+   */
+  get potentialReducedScore(): number {
+    const reductionFactor = 0.45 + Math.random() * 0.1; // 45-55% reduction
+    const reduced = Math.round(this.score * (1 - reductionFactor));
+    return Math.max(reduced, 12); // Minimum 12% (never promise 0)
+  }
+
+  /**
+   * Number of changes needed (correlates with current score)
+   */
+  get changesNeeded(): number {
+    if (this.score >= 60) return 4;
+    if (this.score >= 40) return 3;
+    return 2;
+  }
+
   onAnimationComplete(): void {
     this.showContext = true;
   }
 
   onContinue(): void {
     this.continue.emit();
+  }
+
+  onUpgrade(): void {
+    this.upgrade.emit();
   }
 }

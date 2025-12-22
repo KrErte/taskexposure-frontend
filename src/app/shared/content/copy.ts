@@ -112,18 +112,18 @@ export interface SummaryCopy extends ScreenCopy {
 // =============================================================================
 
 export const ENTRY_COPY: EntryCopy = {
-  headline: 'Understand your exposure to AI automation',
+  headline: 'See how to reduce your AI exposure',
   subheadline:
-    'This assessment analyzes the specific tasks you perform at work and identifies which are most likely to be affected by AI systems over the next 2-5 years.',
+    "This assessment doesn't predict your future — it shows you exactly what to change. Analyze your actual tasks and get a personalized action plan.",
   body: [
-    'The result is based on what you actually do, not your job title or seniority.',
+    'Based on what you actually do, not your job title.',
   ],
   timeEstimate: 'Takes about 15 minutes',
   requirements: 'Works best with specific, honest descriptions of your work',
   deliverables: [
-    'A task-level exposure score',
-    'Clear reasoning for each assessment',
-    'Practical actions to reduce exposure',
+    'Task-level exposure analysis',
+    'Specific reduction opportunities',
+    'Your personalized action plan',
   ],
   cta: {
     primary: 'Start assessment',
@@ -239,21 +239,21 @@ export const RISK_SCORE_COPY: RiskScoreCopy = {
       range: '0-30%',
       meaning:
         'Most of your described tasks require capabilities that AI systems do not yet perform reliably.',
-      action: 'Focus on maintaining and deepening these strengths.',
+      action: 'Your work is well-positioned. See the breakdown to understand why.',
     },
     moderate: {
       label: 'Moderate exposure',
       range: '31-60%',
       meaning:
         'A significant portion of your tasks overlap with current or near-term AI capabilities.',
-      action: 'Review the breakdown to identify which tasks to prioritize.',
+      action: 'There are specific changes you can make to reduce this.',
     },
     high: {
       label: 'High exposure',
       range: '61-100%',
       meaning:
         'Most of your described tasks can be performed by current or emerging AI systems.',
-      action: 'The recommended actions below can meaningfully reduce this exposure.',
+      action: 'The good news: targeted changes can significantly reduce this exposure.',
     },
   },
   disclaimer:
