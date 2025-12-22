@@ -26,8 +26,20 @@ limitations under the License.
   &__subheadline {
     font-size: 1.125rem;
     line-height: 1.6;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     color: var(--color-text-secondary);
+  }
+
+  // Killer sentence
+  &__killer-sentence {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 2rem 0;
+    color: var(--color-accent);
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--color-accent);
+    background-color: rgba(96, 165, 250, 0.05);
   }
 
   // Progress Dashboard
@@ -103,6 +115,10 @@ limitations under the License.
     margin: 0.75rem 0 0 0;
     color: var(--color-text-secondary);
     text-align: center;
+
+    &--success {
+      color: var(--color-low-risk);
+    }
   }
 
   // Actions
@@ -245,6 +261,31 @@ limitations under the License.
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-accent);
+  }
+
+  // Action categories (from Persona Engine spec)
+  &__action-category {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+
+    &--rose {
+      background-color: rgba(248, 113, 113, 0.15);
+      color: var(--color-high-risk);
+    }
+
+    &--amber {
+      background-color: rgba(251, 191, 36, 0.15);
+      color: var(--color-medium-risk);
+    }
+
+    &--emerald {
+      background-color: rgba(74, 222, 128, 0.15);
+      color: var(--color-low-risk);
+    }
   }
 
   &__difficulty {

@@ -19,12 +19,30 @@ import { CommonModule } from '@angular/common';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
 import { ROADMAP_COPY } from '../../shared/content/copy';
 
+/**
+ * Action category from the Persona Engine spec.
+ * Each action is categorized based on which transformation it enables.
+ */
+type ActionCategory = 'delegate-to-ai' | 'elevate-role' | 'amplify-moat';
+
 interface ActionWithState extends RoadmapAction {
   completed: boolean;
   impactScore: number;
   difficulty: 'easy' | 'medium' | 'hard';
+  category: ActionCategory;
 }
 
+/**
+ * 3.7 Roadmap Screen - "The Path Forward"
+ *
+ * PURPOSE: Transform analysis into action.
+ * Frame changes as identity evolution, not task-level fixes.
+ *
+ * ACTION CATEGORIES:
+ * - Delegate to AI: Tasks you still do manually that AI handles well
+ * - Elevate Your Role: Move from executor to orchestrator
+ * - Amplify Your Moat: Expand and deepen human-exclusive work
+ */
 @Component({
   selector: 'app-roadmap',
   standalone: true,
@@ -39,6 +57,7 @@ export class RoadmapComponent {
       completed: false,
       impactScore: this.calculateImpactScore(index),
       difficulty: this.calculateDifficulty(index),
+      category: this.deriveCategory(action, index),
     }));
   }
   @Output() continue = new EventEmitter<void>();
@@ -49,6 +68,10 @@ export class RoadmapComponent {
 
   get completedCount(): number {
     return this.actionsWithState.filter((a) => a.completed).length;
+  }
+
+  get committedActions(): ActionWithState[] {
+    return this.actionsWithState.filter((a) => a.completed);
   }
 
   get totalImpact(): number {
@@ -66,6 +89,24 @@ export class RoadmapComponent {
     return (this.completedCount / this.actionsWithState.length) * 100;
   }
 
+  /**
+   * Group actions by category for display
+   */
+  get actionsByCategory(): Map<ActionCategory, ActionWithState[]> {
+    const grouped = new Map<ActionCategory, ActionWithState[]>();
+    grouped.set('delegate-to-ai', []);
+    grouped.set('elevate-role', []);
+    grouped.set('amplify-moat', []);
+
+    for (const action of this.actionsWithState) {
+      const list = grouped.get(action.category) || [];
+      list.push(action);
+      grouped.set(action.category, list);
+    }
+
+    return grouped;
+  }
+
   private calculateImpactScore(index: number): number {
     // First actions have higher impact
     return Math.max(5, 15 - index * 3);
@@ -75,6 +116,65 @@ export class RoadmapComponent {
     if (index === 0) return 'easy';
     if (index < 3) return 'medium';
     return 'hard';
+  }
+
+  /**
+   * Derive action category based on action content.
+   * TODO: Backend should provide this categorization based on task analysis.
+   */
+  private deriveCategory(action: RoadmapAction, index: number): ActionCategory {
+    // Simple heuristic - in production, backend should provide this
+    const description = action.description.toLowerCase();
+
+    if (
+      description.includes('automat') ||
+      description.includes('ai tool') ||
+      description.includes('delegate') ||
+      description.includes('compress')
+    ) {
+      return 'delegate-to-ai';
+    }
+
+    if (
+      description.includes('orchestrat') ||
+      description.includes('judgment') ||
+      description.includes('review') ||
+      description.includes('shift')
+    ) {
+      return 'elevate-role';
+    }
+
+    if (
+      description.includes('relationship') ||
+      description.includes('trust') ||
+      description.includes('expand') ||
+      description.includes('deepen')
+    ) {
+      return 'amplify-moat';
+    }
+
+    // Fallback based on index
+    if (index % 3 === 0) return 'delegate-to-ai';
+    if (index % 3 === 1) return 'elevate-role';
+    return 'amplify-moat';
+  }
+
+  getCategoryLabel(category: ActionCategory): string {
+    const labels: Record<ActionCategory, string> = {
+      'delegate-to-ai': 'Delegate to AI',
+      'elevate-role': 'Elevate Your Role',
+      'amplify-moat': 'Amplify Your Moat',
+    };
+    return labels[category];
+  }
+
+  getCategoryColorClass(category: ActionCategory): string {
+    const colors: Record<ActionCategory, string> = {
+      'delegate-to-ai': 'rose',
+      'elevate-role': 'amber',
+      'amplify-moat': 'emerald',
+    };
+    return colors[category];
   }
 
   getDifficultyLabel(difficulty: 'easy' | 'medium' | 'hard'): string {

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- 3.5 Score Screen - "The Mirror Moment" -->
 <div class="risk-score">
   <div class="risk-score__gauge-section">
     <app-animated-gauge
@@ -30,10 +31,15 @@ limitations under the License.
   <div class="risk-score__context" [class.risk-score__context--visible]="showContext">
     <h1 class="risk-score__headline">{{ copy.headline }}</h1>
 
-    <div class="glass-card risk-score__meaning">
+    <div class="glass-card risk-score__meaning" [ngClass]="'risk-score__meaning--' + exposureBand">
       <p class="risk-score__meaning-text">{{ scoreMeaning.meaning }}</p>
       <p class="risk-score__meaning-action">{{ scoreMeaning.action }}</p>
     </div>
+
+    <!-- Killer Sentence -->
+    <p class="risk-score__killer-sentence" *ngIf="copy.killerSentence">
+      {{ copy.killerSentence }}
+    </p>
 
     <!-- Risk Reduction Potential teaser (non-premium only) -->
     @if (!premium.isPremium) {
@@ -48,10 +54,10 @@ limitations under the License.
           <div class="risk-score__reduction-text">
             <span class="risk-score__reduction-label">Reduction potential</span>
             <span class="risk-score__reduction-value">
-              With <strong>{{ changesNeeded }} targeted changes</strong>, your exposure could drop
+              With <strong>{{ changesNeeded }} targeted changes</strong>, your exposure could shift
               <span class="risk-score__reduction-numbers">
                 <span class="risk-score__reduction-from">{{ score }}%</span>
-                <span class="risk-score__reduction-arrow">→</span>
+                <span class="risk-score__reduction-arrow">&rarr;</span>
                 <span class="risk-score__reduction-to">~{{ potentialReducedScore }}%</span>
               </span>
             </span>
@@ -81,6 +87,7 @@ limitations under the License.
     } @else {
       <button type="button" class="risk-score__cta" (click)="onContinue()">
         {{ copy.cta.primary }}
+        <span class="risk-score__cta-arrow">&rarr;</span>
       </button>
     }
   </div>

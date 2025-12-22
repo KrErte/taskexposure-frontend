@@ -20,11 +20,24 @@ import {
   RISK_SCORE_COPY,
   getExposureBand,
   getScoreMeaning,
+  ExposureBand,
 } from '../../shared/content/copy';
 import { AnimatedGaugeComponent } from '../../shared/components/animated-gauge/animated-gauge.component';
 import { UpgradeCtaComponent } from '../../shared/components/upgrade-cta/upgrade-cta.component';
 import { PremiumService } from '../../core/services/premium.service';
 
+/**
+ * 3.5 Score Screen - "The Mirror Moment"
+ *
+ * PURPOSE: Deliver the exposure score with emotional intelligence.
+ * Frame numbers as starting points, not verdicts.
+ *
+ * Uses four exposure bands with emotional framing:
+ * - Protected (<30%): Strong human moats
+ * - Mixed (30-50%): Mix of automatable and human-exclusive
+ * - Exposed (50-70%): Significant AI overlap, but not a crisis
+ * - Critical (>70%): Requires active attention, not panic
+ */
 @Component({
   selector: 'app-risk-score',
   standalone: true,
@@ -42,16 +55,23 @@ export class RiskScoreComponent {
   readonly copy = RISK_SCORE_COPY;
   showContext: boolean = false;
 
+  get exposureBand(): ExposureBand {
+    return getExposureBand(this.score);
+  }
+
   get scoreColorClass(): string {
-    const band = getExposureBand(this.score);
-    if (band === 'low') return 'risk-score__percentage--low';
-    if (band === 'moderate') return 'risk-score__percentage--medium';
-    return 'risk-score__percentage--high';
+    const band = this.exposureBand;
+    const colorMap: Record<ExposureBand, string> = {
+      protected: 'risk-score__percentage--protected',
+      mixed: 'risk-score__percentage--mixed',
+      exposed: 'risk-score__percentage--exposed',
+      critical: 'risk-score__percentage--critical',
+    };
+    return colorMap[band];
   }
 
   get bandColorClass(): string {
-    const band = getExposureBand(this.score);
-    return `risk-score__band--${band}`;
+    return `risk-score__band--${this.exposureBand}`;
   }
 
   get scoreMeaning(): { label: string; meaning: string; action: string } {
@@ -60,10 +80,11 @@ export class RiskScoreComponent {
 
   /**
    * Calculate potential reduced score (40-55% reduction based on actions)
-   * This creates the "control" feeling GPT mentioned
+   * This creates agency - showing what's possible with targeted changes
    */
   get potentialReducedScore(): number {
-    const reductionFactor = 0.45 + Math.random() * 0.1; // 45-55% reduction
+    // Use a deterministic calculation based on score to avoid random changes
+    const reductionFactor = 0.45 + (this.score % 10) / 100;
     const reduced = Math.round(this.score * (1 - reductionFactor));
     return Math.max(reduced, 12); // Minimum 12% (never promise 0)
   }
@@ -72,8 +93,9 @@ export class RiskScoreComponent {
    * Number of changes needed (correlates with current score)
    */
   get changesNeeded(): number {
-    if (this.score >= 60) return 4;
-    if (this.score >= 40) return 3;
+    if (this.score >= 70) return 5;
+    if (this.score >= 50) return 4;
+    if (this.score >= 30) return 3;
     return 2;
   }
 

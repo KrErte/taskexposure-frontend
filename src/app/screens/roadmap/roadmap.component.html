@@ -14,31 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<!-- 3.7 Roadmap Screen - "The Path Forward" -->
 <div class="roadmap">
   <h1 class="roadmap__headline">{{ copy.headline }}</h1>
   <p class="roadmap__subheadline">{{ copy.subheadline }}</p>
+
+  <!-- Killer Sentence -->
+  <p class="roadmap__killer-sentence" *ngIf="copy.killerSentence">
+    {{ copy.killerSentence }}
+  </p>
 
   <!-- Progress Dashboard -->
   <div class="glass-card glass-card--accent roadmap__progress-dashboard">
     <div class="roadmap__progress-header">
       <div class="roadmap__progress-stats">
         <span class="roadmap__progress-count font-mono">{{ completedCount }}/{{ actionsWithState.length }}</span>
-        <span class="roadmap__progress-label">actions planned</span>
+        <span class="roadmap__progress-label">actions committed</span>
       </div>
       <div class="roadmap__impact-score">
         <span class="roadmap__impact-value font-mono">+{{ totalImpact }}%</span>
-        <span class="roadmap__impact-label">exposure reduction</span>
+        <span class="roadmap__impact-label">potential shift</span>
       </div>
     </div>
     <div class="roadmap__progress-bar-container">
       <div class="roadmap__progress-bar" [style.width.%]="progressPercentage"></div>
     </div>
     <p class="roadmap__progress-hint" *ngIf="completedCount === 0">
-      Check off actions you plan to take
+      Check off actions you commit to taking
+    </p>
+    <p class="roadmap__progress-hint roadmap__progress-hint--success" *ngIf="completedCount > 0 && completedCount < actionsWithState.length">
+      {{ completedCount }} action{{ completedCount > 1 ? 's' : '' }} committed. Keep going.
+    </p>
+    <p class="roadmap__progress-hint roadmap__progress-hint--success" *ngIf="completedCount === actionsWithState.length && actionsWithState.length > 0">
+      All actions committed. Ready to transform your work.
     </p>
   </div>
 
-  <!-- Action Cards -->
+  <!-- Action Cards with Category Badge -->
   <div class="roadmap__actions">
     <div
       class="glass-card roadmap__action"
@@ -67,19 +79,24 @@ limitations under the License.
         </button>
         <div class="roadmap__action-info">
           <div class="roadmap__action-meta">
-            <span class="roadmap__action-number">{{ copy.actionPrefix }} {{ i + 1 }}</span>
+            <span
+              class="roadmap__action-category"
+              [ngClass]="'roadmap__action-category--' + getCategoryColorClass(action.category)"
+            >
+              {{ getCategoryLabel(action.category) }}
+            </span>
             <span class="roadmap__difficulty" [ngClass]="'roadmap__difficulty--' + action.difficulty">
               {{ getDifficultyLabel(action.difficulty) }}
             </span>
           </div>
-          <h2 class="roadmap__action-title">{{ action.description }}</h2>
+          <h2 class="roadmap__action-title">{{ action.title || action.description }}</h2>
         </div>
         <div class="roadmap__action-impact-badge">
           <span class="roadmap__impact-number">+{{ action.impactScore }}%</span>
         </div>
       </div>
 
-      <p class="roadmap__action-explanation">{{ action.explanation }}</p>
+      <p class="roadmap__action-explanation">{{ action.explanation || action.mechanism }}</p>
 
       <div class="roadmap__action-impact">
         <span class="roadmap__action-impact-label">{{ copy.impactLabel }}:</span>
