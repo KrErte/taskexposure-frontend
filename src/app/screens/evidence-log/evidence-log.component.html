@@ -183,6 +183,18 @@ limitations under the License.
         <option value="last7days">{{ 'evidenceLog.filters.last7Days' | translate }}</option>
         <option value="last30days">{{ 'evidenceLog.filters.last30Days' | translate }}</option>
       </select>
+
+      <select
+        class="form-select"
+        [ngModel]="filter().status"
+        (ngModelChange)="updateFilter('status', $event)"
+      >
+        <option value="all">{{ 'evidenceLog.filters.statusAll' | translate }}</option>
+        <option value="FRESH">{{ 'evidenceLog.status.fresh' | translate }}</option>
+        <option value="STALE">{{ 'evidenceLog.status.stale' | translate }}</option>
+        <option value="OLD">{{ 'evidenceLog.status.old' | translate }}</option>
+        <option value="ARCHIVE">{{ 'evidenceLog.status.archive' | translate }}</option>
+      </select>
     </div>
 
     @if (allTags().length > 0) {
@@ -235,16 +247,33 @@ limitations under the License.
         </div>
       } @else {
         @for (entry of filteredEntries(); track entry.id) {
-          <article class="entry-card glass-card">
+          <article class="entry-card glass-card" [class.entry-card--needs-anchor]="entry.needsReanchor">
             <div class="entry-card__header">
               <h3 class="entry-card__title">{{ entry.title }}</h3>
-              <span class="impact-pill" [ngClass]="getImpactClass(entry.impact)">
-                {{ getImpactLabel(entry.impact) }}
-              </span>
+              <div class="entry-card__badges">
+                @if (entry.status) {
+                  <span class="status-badge" [ngClass]="getStatusClass(entry.status)">
+                    {{ getStatusLabel(entry.status) }}
+                  </span>
+                }
+                <span class="impact-pill" [ngClass]="getImpactClass(entry.impact)">
+                  {{ getImpactLabel(entry.impact) }}
+                </span>
+              </div>
             </div>
 
             <div class="entry-card__meta">
               <span class="entry-card__date">{{ formatDate(entry.createdAt) }}</span>
+              @if (entry.weight !== undefined) {
+                <span class="entry-card__weight" [class.entry-card__weight--low]="entry.weight < 0.5">
+                  {{ 'evidenceLog.decay.weight' | translate }}: {{ formatWeight(entry.weight) }}
+                </span>
+              }
+              @if (entry.ageDays !== undefined) {
+                <span class="entry-card__age">
+                  {{ 'evidenceLog.decay.age' | translate : { days: entry.ageDays } }}
+                </span>
+              }
             </div>
 
             @if (entry.tags && entry.tags.length > 0) {
@@ -279,6 +308,15 @@ limitations under the License.
             }
 
             <div class="entry-card__actions">
+              @if (entry.needsReanchor) {
+                <button
+                  type="button"
+                  class="btn btn--accent btn--sm"
+                  (click)="anchorEntry(entry)"
+                >
+                  {{ 'evidenceLog.actions.reanchor' | translate }}
+                </button>
+              }
               <button
                 type="button"
                 class="btn btn--ghost btn--sm"
@@ -353,6 +391,65 @@ limitations under the License.
           </div>
         </div>
       </div>
+
+      <!-- Audit Preview Section -->
+      @if (auditPreview()) {
+        <div class="insight-section insight-section--audit">
+          <h4 class="insight-section__title">{{ 'evidenceLog.audit.title' | translate }}</h4>
+
+          <div class="insight-item">
+            <span class="insight-item__label">{{ 'evidenceLog.audit.averageWeight' | translate }}</span>
+            <span class="insight-item__value insight-item__value--sm">{{ formatWeight(auditPreview()!.averageWeight) }}</span>
+          </div>
+
+          @if (auditPreview()!.needsAttentionCount > 0) {
+            <div class="insight-item insight-item--warning">
+              <span class="insight-item__label">{{ 'evidenceLog.audit.needsAttention' | translate }}</span>
+              <span class="insight-item__value insight-item__value--warning">{{ auditPreview()!.needsAttentionCount }}</span>
+            </div>
+          }
+
+          <div class="insight-item">
+            <span class="insight-item__label">{{ 'evidenceLog.audit.byStatus' | translate }}</span>
+            <div class="status-distribution">
+              <div class="status-distribution__bar">
+                @if (auditPreview()!.totalEntries > 0) {
+                  <div
+                    class="status-distribution__segment status-distribution__segment--fresh"
+                    [style.width.%]="(auditPreview()!.statusDistribution.fresh / auditPreview()!.totalEntries) * 100"
+                  ></div>
+                  <div
+                    class="status-distribution__segment status-distribution__segment--stale"
+                    [style.width.%]="(auditPreview()!.statusDistribution.stale / auditPreview()!.totalEntries) * 100"
+                  ></div>
+                  <div
+                    class="status-distribution__segment status-distribution__segment--old"
+                    [style.width.%]="(auditPreview()!.statusDistribution.old / auditPreview()!.totalEntries) * 100"
+                  ></div>
+                  <div
+                    class="status-distribution__segment status-distribution__segment--archive"
+                    [style.width.%]="(auditPreview()!.statusDistribution.archive / auditPreview()!.totalEntries) * 100"
+                  ></div>
+                }
+              </div>
+              <div class="status-distribution__legend">
+                <span class="legend-item legend-item--fresh">
+                  {{ 'evidenceLog.status.fresh' | translate }}: {{ auditPreview()!.statusDistribution.fresh }}
+                </span>
+                <span class="legend-item legend-item--stale">
+                  {{ 'evidenceLog.status.stale' | translate }}: {{ auditPreview()!.statusDistribution.stale }}
+                </span>
+                <span class="legend-item legend-item--old">
+                  {{ 'evidenceLog.status.old' | translate }}: {{ auditPreview()!.statusDistribution.old }}
+                </span>
+                <span class="legend-item legend-item--archive">
+                  {{ 'evidenceLog.status.archive' | translate }}: {{ auditPreview()!.statusDistribution.archive }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </aside>
   </div>
 </div>

@@ -22,30 +22,38 @@ import {
   EvidenceEntry,
   EvidenceEntryCreate,
   EvidenceEntryUpdate,
+  EvidenceStatus,
+  EvidenceAuditPreview,
+  EvidenceListResponse,
 } from '../../shared/models/evidence-entry.model';
 import { environment } from '../../../environments/environment';
 
 /**
  * HTTP implementation of Evidence Log repository
- * Scaffold for future backend integration
+ * Integrates with backend Evidence API with decay mechanics
  */
 @Injectable({
   providedIn: 'root',
 })
 export class HttpEvidenceLogRepository extends EvidenceLogRepository {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/evidence-log`;
+  private readonly baseUrl = `${environment.apiUrl}/evidence`;
 
-  getAll(from?: string, to?: string): Observable<EvidenceEntry[]> {
+  getAll(status?: EvidenceStatus): Observable<EvidenceEntry[]> {
     let params = new HttpParams();
-    if (from) {
-      params = params.set('from', from);
-    }
-    if (to) {
-      params = params.set('to', to);
+    if (status) {
+      params = params.set('status', status);
     }
 
-    return this.http.get<EvidenceEntry[]>(this.baseUrl, { params });
+    return this.http.get<EvidenceListResponse | EvidenceEntry[]>(this.baseUrl, { params }).pipe(
+      map((response) => {
+        // Handle both wrapped response and direct array
+        if (Array.isArray(response)) {
+          return response;
+        }
+        return response.entries || [];
+      })
+    );
   }
 
   getById(id: string): Observable<EvidenceEntry | null> {
@@ -64,5 +72,13 @@ export class HttpEvidenceLogRepository extends EvidenceLogRepository {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  anchor(id: string): Observable<EvidenceEntry> {
+    return this.http.post<EvidenceEntry>(`${this.baseUrl}/${id}/anchor`, {});
+  }
+
+  getAuditPreview(): Observable<EvidenceAuditPreview> {
+    return this.http.get<EvidenceAuditPreview>(`${this.baseUrl}/audit/preview`);
   }
 }

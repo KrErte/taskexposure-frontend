@@ -28,6 +28,8 @@ import {
   EvidenceLogFilter,
   EvidenceImpact,
   EvidenceInsights,
+  EvidenceStatus,
+  EvidenceAuditPreview,
 } from '../../shared/models/evidence-entry.model';
 import { formatDateWithWeek } from '../../shared/utils/date.utils';
 
@@ -65,6 +67,7 @@ export class EvidenceLogComponent implements OnInit {
     impact: 'all',
     timeRange: 'all',
     tags: [],
+    status: 'all',
   });
 
   // State
@@ -75,6 +78,7 @@ export class EvidenceLogComponent implements OnInit {
     topTags: [],
     impactDistribution: { low: 0, medium: 0, high: 0 },
   });
+  auditPreview = signal<EvidenceAuditPreview | null>(null);
   loading = signal<boolean>(true);
 
   // Computed filtered entries
@@ -101,6 +105,11 @@ export class EvidenceLogComponent implements OnInit {
       result = result.filter((e) =>
         f.tags!.some((tag) => e.tags?.includes(tag.toLowerCase()))
       );
+    }
+
+    // Status filter
+    if (f.status && f.status !== 'all') {
+      result = result.filter((e) => e.status === f.status);
     }
 
     // Search text filter
@@ -153,6 +162,12 @@ export class EvidenceLogComponent implements OnInit {
         this.loading.set(false);
         this.toastService.error(this.t('evidenceLog.errors.loadFailed'));
       },
+    });
+
+    // Load audit preview
+    this.evidenceLogService.getAuditPreview().subscribe({
+      next: (preview) => this.auditPreview.set(preview),
+      error: () => {} // Silent fail for audit preview
     });
   }
 
@@ -416,6 +431,7 @@ export class EvidenceLogComponent implements OnInit {
       impact: 'all',
       timeRange: 'all',
       tags: [],
+      status: 'all',
     });
   }
 
@@ -425,7 +441,8 @@ export class EvidenceLogComponent implements OnInit {
       f.searchText ||
       (f.impact && f.impact !== 'all') ||
       (f.timeRange && f.timeRange !== 'all') ||
-      (f.tags && f.tags.length > 0)
+      (f.tags && f.tags.length > 0) ||
+      (f.status && f.status !== 'all')
     );
   }
 
@@ -445,5 +462,46 @@ export class EvidenceLogComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  // Status helper methods
+  getStatusLabel(status: EvidenceStatus | undefined): string {
+    if (!status) return '';
+    return this.t(`evidenceLog.status.${status.toLowerCase()}`);
+  }
+
+  getStatusClass(status: EvidenceStatus | undefined): string {
+    if (!status) return '';
+    return `status-badge--${status.toLowerCase()}`;
+  }
+
+  // Re-anchor entry
+  anchorEntry(entry: EvidenceEntry): void {
+    this.evidenceLogService.anchor(entry.id).subscribe({
+      next: (updated) => {
+        const current = this.entries();
+        const index = current.findIndex((e) => e.id === updated.id);
+        if (index !== -1) {
+          const newEntries = [...current];
+          newEntries[index] = updated;
+          this.entries.set(newEntries);
+        }
+        this.toastService.success(this.t('evidenceLog.messages.anchored'));
+        // Refresh audit preview
+        this.evidenceLogService.getAuditPreview().subscribe({
+          next: (preview) => this.auditPreview.set(preview),
+          error: () => {}
+        });
+      },
+      error: () => {
+        this.toastService.error(this.t('evidenceLog.errors.anchorFailed'));
+      },
+    });
+  }
+
+  // Format weight as percentage
+  formatWeight(weight: number | undefined): string {
+    if (weight === undefined) return '';
+    return `${Math.round(weight * 100)}%`;
   }
 }

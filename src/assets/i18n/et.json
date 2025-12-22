@@ -459,7 +459,24 @@
       "last7Days": "Viimased 7 päeva",
       "last30Days": "Viimased 30 päeva",
       "tags": "Sildid",
-      "clearAll": "Tühista filtrid"
+      "clearAll": "Tühista filtrid",
+      "statusAll": "Kõik staatused"
+    },
+    "status": {
+      "fresh": "Värske",
+      "stale": "Vananev",
+      "old": "Vana",
+      "archive": "Arhiiv"
+    },
+    "decay": {
+      "weight": "Tugevus",
+      "age": "{{days}} päeva vana"
+    },
+    "audit": {
+      "title": "Tõendite tervis",
+      "averageWeight": "Keskmine tugevus",
+      "needsAttention": "Vajab tähelepanu",
+      "byStatus": "Staatuse järgi"
     },
     "entry": {
       "showMore": "Näita rohkem",
@@ -467,7 +484,8 @@
     },
     "actions": {
       "edit": "Muuda",
-      "delete": "Kustuta"
+      "delete": "Kustuta",
+      "reanchor": "Ankurda uuesti"
     },
     "edit": {
       "title": "Muuda kirjet",
@@ -493,13 +511,15 @@
     "messages": {
       "saved": "Kirje salvestatud",
       "updated": "Kirje uuendatud",
-      "deleted": "Kirje kustutatud"
+      "deleted": "Kirje kustutatud",
+      "anchored": "Kirje uuesti ankurdatud"
     },
     "errors": {
       "loadFailed": "Kirjete laadimine ebaõnnestus",
       "saveFailed": "Kirje salvestamine ebaõnnestus",
       "updateFailed": "Kirje uuendamine ebaõnnestus",
-      "deleteFailed": "Kirje kustutamine ebaõnnestus"
+      "deleteFailed": "Kirje kustutamine ebaõnnestus",
+      "anchorFailed": "Kirje uuesti ankurdamine ebaõnnestus"
     }
   }
 }

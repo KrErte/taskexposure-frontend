@@ -25,6 +25,12 @@ export type EvidenceImpact = 'low' | 'medium' | 'high';
 export type EvidenceSource = 'manual' | 'prompt' | 'ai';
 
 /**
+ * Decay status for evidence entries
+ * Based on 90-day half-life decay algorithm
+ */
+export type EvidenceStatus = 'FRESH' | 'STALE' | 'OLD' | 'ARCHIVE';
+
+/**
  * Evidence Entry - A record of a moment of adaptation
  */
 export interface EvidenceEntry {
@@ -34,6 +40,8 @@ export interface EvidenceEntry {
   createdAt: string;
   /** ISO timestamp of when the entry was last updated */
   updatedAt?: string;
+  /** ISO timestamp of when the entry was last anchored (reset decay) */
+  lastAnchoredAt?: string;
   /** Short title describing the adaptation moment (5-120 chars) */
   title: string;
   /** Optional detailed notes (up to 1000 chars) */
@@ -46,6 +54,16 @@ export interface EvidenceEntry {
   source: EvidenceSource;
   /** Week key derived from createdAt (e.g., "2025-W52") */
   weekKey: string;
+
+  // Computed decay fields (from backend)
+  /** Days since last anchor (or creation if never anchored) */
+  ageDays?: number;
+  /** Decay weight 0.2–1.0, based on 90-day half-life */
+  weight?: number;
+  /** Current decay status */
+  status?: EvidenceStatus;
+  /** Whether entry needs re-anchoring (weight < 0.5) */
+  needsReanchor?: boolean;
 }
 
 /**
@@ -81,6 +99,8 @@ export interface EvidenceLogFilter {
   timeRange?: 'last7days' | 'last30days' | 'all';
   /** Filter by specific tags */
   tags?: string[];
+  /** Filter by decay status */
+  status?: EvidenceStatus | 'all';
 }
 
 /**
@@ -97,4 +117,34 @@ export interface EvidenceInsights {
     medium: number;
     high: number;
   };
+}
+
+/**
+ * Audit preview data - silent metrics for evidence health
+ */
+export interface EvidenceAuditPreview {
+  /** Total number of entries */
+  totalEntries: number;
+  /** Number of entries needing re-anchor */
+  needsAttentionCount: number;
+  /** Average weight across all entries */
+  averageWeight: number;
+  /** Distribution by status */
+  statusDistribution: {
+    fresh: number;
+    stale: number;
+    old: number;
+    archive: number;
+  };
+  /** Weighted sum of all entries */
+  weightedTotal: number;
+}
+
+/**
+ * Response wrapper for evidence list from backend
+ */
+export interface EvidenceListResponse {
+  entries: EvidenceEntry[];
+  total: number;
+  audit?: EvidenceAuditPreview;
 }
