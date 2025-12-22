@@ -25,9 +25,11 @@ import {
   EvidenceEntryUpdate,
   EvidenceLogFilter,
   EvidenceInsights,
+  EvidenceStatus,
+  EvidenceAuditPreview,
 } from '../../shared/models/evidence-entry.model';
 import { environment } from '../../../environments/environment';
-import { isWithinLastDays, daysAgo } from '../../shared/utils/date.utils';
+import { isWithinLastDays } from '../../shared/utils/date.utils';
 
 /**
  * Factory function to provide the correct repository based on environment config
@@ -41,7 +43,7 @@ function evidenceLogRepositoryFactory(): EvidenceLogRepository {
 
 /**
  * Evidence Log Service
- * Manages evidence entries and provides filtering and insights
+ * Manages evidence entries and provides filtering, insights, and decay mechanics
  */
 @Injectable({
   providedIn: 'root',
@@ -51,11 +53,14 @@ export class EvidenceLogService {
 
   private entriesSubject = new BehaviorSubject<EvidenceEntry[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
+  private auditPreviewSubject = new BehaviorSubject<EvidenceAuditPreview | null>(null);
 
   /** Observable of all entries */
   readonly entries$ = this.entriesSubject.asObservable();
   /** Observable of loading state */
   readonly loading$ = this.loadingSubject.asObservable();
+  /** Observable of audit preview */
+  readonly auditPreview$ = this.auditPreviewSubject.asObservable();
 
   constructor() {
     // Use factory to select repository based on environment
@@ -64,10 +69,11 @@ export class EvidenceLogService {
 
   /**
    * Load all entries from the repository
+   * @param status - Optional status filter
    */
-  loadEntries(): Observable<EvidenceEntry[]> {
+  loadEntries(status?: EvidenceStatus): Observable<EvidenceEntry[]> {
     this.loadingSubject.next(true);
-    return this.repository.getAll().pipe(
+    return this.repository.getAll(status).pipe(
       tap((entries) => {
         this.entriesSubject.next(entries);
         this.loadingSubject.next(false);
@@ -92,6 +98,7 @@ export class EvidenceLogService {
       tap((entry) => {
         const current = this.entriesSubject.value;
         this.entriesSubject.next([entry, ...current]);
+        this.refreshAuditPreview();
       })
     );
   }
@@ -121,8 +128,46 @@ export class EvidenceLogService {
       tap(() => {
         const current = this.entriesSubject.value;
         this.entriesSubject.next(current.filter((e) => e.id !== id));
+        this.refreshAuditPreview();
       })
     );
+  }
+
+  /**
+   * Re-anchor an evidence entry (reset decay timer)
+   */
+  anchor(id: string): Observable<EvidenceEntry> {
+    return this.repository.anchor(id).pipe(
+      tap((updated) => {
+        const current = this.entriesSubject.value;
+        const index = current.findIndex((e) => e.id === id);
+        if (index !== -1) {
+          const newEntries = [...current];
+          newEntries[index] = updated;
+          this.entriesSubject.next(newEntries);
+        }
+        this.refreshAuditPreview();
+      })
+    );
+  }
+
+  /**
+   * Get audit preview (silent metrics for evidence health)
+   */
+  getAuditPreview(): Observable<EvidenceAuditPreview> {
+    return this.repository.getAuditPreview().pipe(
+      tap((preview) => this.auditPreviewSubject.next(preview))
+    );
+  }
+
+  /**
+   * Refresh audit preview in background
+   */
+  private refreshAuditPreview(): void {
+    this.repository.getAuditPreview().subscribe({
+      next: (preview) => this.auditPreviewSubject.next(preview),
+      error: () => {} // Silent fail for background refresh
+    });
   }
 
   /**
@@ -147,6 +192,15 @@ export class EvidenceLogService {
     );
   }
 
+  /**
+   * Get count of entries needing re-anchor
+   */
+  getNeedsAttentionCount(): Observable<number> {
+    return this.entries$.pipe(
+      map((entries) => entries.filter((e) => e.needsReanchor).length)
+    );
+  }
+
   private applyFilter(entries: EvidenceEntry[], filter: EvidenceLogFilter): EvidenceEntry[] {
     let result = [...entries];
 
@@ -159,6 +213,11 @@ export class EvidenceLogService {
     // Impact filter
     if (filter.impact && filter.impact !== 'all') {
       result = result.filter((e) => e.impact === filter.impact);
+    }
+
+    // Status filter
+    if (filter.status && filter.status !== 'all') {
+      result = result.filter((e) => e.status === filter.status);
     }
 
     // Tags filter

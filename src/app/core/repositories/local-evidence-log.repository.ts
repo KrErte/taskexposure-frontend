@@ -21,18 +21,25 @@ import {
   EvidenceEntry,
   EvidenceEntryCreate,
   EvidenceEntryUpdate,
+  EvidenceStatus,
+  EvidenceAuditPreview,
 } from '../../shared/models/evidence-entry.model';
 import { generateUUID, getWeekKey } from '../../shared/utils/date.utils';
 
 const STORAGE_KEY = 'taskexposure.evidenceLog.v1';
+const DECAY_HALF_LIFE_DAYS = 90;
+const MIN_WEIGHT = 0.2;
+const MAX_WEIGHT = 1.0;
 
 /**
  * Local storage implementation of Evidence Log repository
+ * Includes local decay computation using 90-day half-life algorithm
  */
 @Injectable({
   providedIn: 'root',
 })
 export class LocalEvidenceLogRepository extends EvidenceLogRepository {
+
   private getStoredEntries(): EvidenceEntry[] {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
@@ -48,20 +55,54 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
-  getAll(from?: string, to?: string): Observable<EvidenceEntry[]> {
+  /**
+   * Compute decay fields for an entry
+   */
+  private computeDecay(entry: EvidenceEntry): EvidenceEntry {
+    const anchorDate = entry.lastAnchoredAt || entry.createdAt;
+    const ageDays = Math.floor(
+      (Date.now() - new Date(anchorDate).getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    // weight = exp(-ln(2) * age_days / half_life)
+    const rawWeight = Math.exp(-Math.LN2 * ageDays / DECAY_HALF_LIFE_DAYS);
+    const weight = Math.max(MIN_WEIGHT, Math.min(MAX_WEIGHT, rawWeight));
+
+    // Determine status based on weight
+    let status: EvidenceStatus;
+    if (weight >= 0.8) {
+      status = 'FRESH';
+    } else if (weight >= 0.5) {
+      status = 'STALE';
+    } else if (weight >= 0.3) {
+      status = 'OLD';
+    } else {
+      status = 'ARCHIVE';
+    }
+
+    const needsReanchor = weight < 0.5;
+
+    return {
+      ...entry,
+      ageDays,
+      weight: Math.round(weight * 100) / 100,
+      status,
+      needsReanchor,
+    };
+  }
+
+  getAll(status?: EvidenceStatus): Observable<EvidenceEntry[]> {
     let entries = this.getStoredEntries();
 
     // Sort by createdAt descending (most recent first)
     entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    // Apply date filters if provided
-    if (from) {
-      const fromDate = new Date(from);
-      entries = entries.filter((e) => new Date(e.createdAt) >= fromDate);
-    }
-    if (to) {
-      const toDate = new Date(to);
-      entries = entries.filter((e) => new Date(e.createdAt) <= toDate);
+    // Compute decay for all entries
+    entries = entries.map((e) => this.computeDecay(e));
+
+    // Filter by status if provided
+    if (status) {
+      entries = entries.filter((e) => e.status === status);
     }
 
     return of(entries);
@@ -70,7 +111,7 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
   getById(id: string): Observable<EvidenceEntry | null> {
     const entries = this.getStoredEntries();
     const entry = entries.find((e) => e.id === id) || null;
-    return of(entry);
+    return of(entry ? this.computeDecay(entry) : null);
   }
 
   create(data: EvidenceEntryCreate): Observable<EvidenceEntry> {
@@ -78,6 +119,7 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
     const entry: EvidenceEntry = {
       id: generateUUID(),
       createdAt: now,
+      lastAnchoredAt: now,
       title: data.title.trim(),
       notes: data.notes?.trim() || undefined,
       tags: data.tags?.map((t) => t.toLowerCase().trim()).filter((t) => t.length >= 2) || undefined,
@@ -90,7 +132,7 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
     entries.unshift(entry);
     this.saveEntries(entries);
 
-    return of(entry);
+    return of(this.computeDecay(entry));
   }
 
   update(id: string, data: EvidenceEntryUpdate): Observable<EvidenceEntry> {
@@ -117,7 +159,7 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
     entries[index] = updated;
     this.saveEntries(entries);
 
-    return of(updated);
+    return of(this.computeDecay(updated));
   }
 
   delete(id: string): Observable<void> {
@@ -130,5 +172,51 @@ export class LocalEvidenceLogRepository extends EvidenceLogRepository {
 
     this.saveEntries(filtered);
     return of(void 0);
+  }
+
+  anchor(id: string): Observable<EvidenceEntry> {
+    const entries = this.getStoredEntries();
+    const index = entries.findIndex((e) => e.id === id);
+
+    if (index === -1) {
+      return throwError(() => new Error('Entry not found'));
+    }
+
+    const now = new Date().toISOString();
+    const updated: EvidenceEntry = {
+      ...entries[index],
+      lastAnchoredAt: now,
+      updatedAt: now,
+    };
+
+    entries[index] = updated;
+    this.saveEntries(entries);
+
+    return of(this.computeDecay(updated));
+  }
+
+  getAuditPreview(): Observable<EvidenceAuditPreview> {
+    const entries = this.getStoredEntries().map((e) => this.computeDecay(e));
+
+    const totalEntries = entries.length;
+    const needsAttentionCount = entries.filter((e) => e.needsReanchor).length;
+
+    const totalWeight = entries.reduce((sum, e) => sum + (e.weight || 0), 0);
+    const averageWeight = totalEntries > 0 ? Math.round((totalWeight / totalEntries) * 100) / 100 : 0;
+
+    const statusDistribution = {
+      fresh: entries.filter((e) => e.status === 'FRESH').length,
+      stale: entries.filter((e) => e.status === 'STALE').length,
+      old: entries.filter((e) => e.status === 'OLD').length,
+      archive: entries.filter((e) => e.status === 'ARCHIVE').length,
+    };
+
+    return of({
+      totalEntries,
+      needsAttentionCount,
+      averageWeight,
+      statusDistribution,
+      weightedTotal: Math.round(totalWeight * 100) / 100,
+    });
   }
 }

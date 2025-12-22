@@ -19,6 +19,8 @@ import {
   EvidenceEntry,
   EvidenceEntryCreate,
   EvidenceEntryUpdate,
+  EvidenceStatus,
+  EvidenceAuditPreview,
 } from '../../shared/models/evidence-entry.model';
 
 /**
@@ -27,10 +29,9 @@ import {
 export abstract class EvidenceLogRepository {
   /**
    * Get all evidence entries
-   * @param from - Optional start date filter (ISO string)
-   * @param to - Optional end date filter (ISO string)
+   * @param status - Optional status filter
    */
-  abstract getAll(from?: string, to?: string): Observable<EvidenceEntry[]>;
+  abstract getAll(status?: EvidenceStatus): Observable<EvidenceEntry[]>;
 
   /**
    * Get a single evidence entry by ID
@@ -51,4 +52,14 @@ export abstract class EvidenceLogRepository {
    * Delete an evidence entry
    */
   abstract delete(id: string): Observable<void>;
+
+  /**
+   * Re-anchor an evidence entry (reset decay timer)
+   */
+  abstract anchor(id: string): Observable<EvidenceEntry>;
+
+  /**
+   * Get audit preview (silent metrics for evidence health)
+   */
+  abstract getAuditPreview(): Observable<EvidenceAuditPreview>;
 }
