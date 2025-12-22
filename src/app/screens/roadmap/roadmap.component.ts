@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoadmapAction } from '../../shared/models/roadmap-action.model';
-import { ROADMAP_COPY } from '../../shared/content/copy';
+import { CopyService } from '../../core/services/copy.service';
 
 /**
  * Action category from the Persona Engine spec.
@@ -51,6 +51,8 @@ interface ActionWithState extends RoadmapAction {
   styleUrl: './roadmap.component.scss',
 })
 export class RoadmapComponent {
+  private copyService = inject(CopyService);
+
   @Input() set actions(value: RoadmapAction[]) {
     this.actionsWithState = value.map((action, index) => ({
       ...action,
@@ -62,7 +64,9 @@ export class RoadmapComponent {
   }
   @Output() continue = new EventEmitter<void>();
 
-  readonly copy = ROADMAP_COPY;
+  get copy() {
+    return this.copyService.roadmapCopy;
+  }
   actionsWithState: ActionWithState[] = [];
   celebratingIndex: number | null = null;
 
@@ -178,11 +182,7 @@ export class RoadmapComponent {
   }
 
   getDifficultyLabel(difficulty: 'easy' | 'medium' | 'hard'): string {
-    return {
-      easy: 'Quick win',
-      medium: 'Moderate effort',
-      hard: 'Long-term',
-    }[difficulty];
+    return this.copyService.getDifficultyLabel(difficulty);
   }
 
   toggleAction(index: number): void {

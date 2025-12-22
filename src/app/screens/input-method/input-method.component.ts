@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { INPUT_METHOD_COPY } from '../../shared/content/copy';
+import { CopyService } from '../../core/services/copy.service';
 
 @Component({
   selector: 'app-input-method',
@@ -26,9 +26,13 @@ import { INPUT_METHOD_COPY } from '../../shared/content/copy';
   styleUrl: './input-method.component.scss',
 })
 export class InputMethodComponent {
+  private copyService = inject(CopyService);
+
   @Output() selectManual = new EventEmitter<void>();
 
-  readonly copy = INPUT_METHOD_COPY;
+  get copy() {
+    return this.copyService.inputMethodCopy;
+  }
 
   onSelectManual(): void {
     this.selectManual.emit();

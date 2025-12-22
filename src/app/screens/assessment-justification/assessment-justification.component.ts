@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ASSESSMENT_JUSTIFICATION_COPY,
-  getSignalStrengthExplanation,
-} from '../../shared/content/copy';
 import { SignalStrength } from '../../shared/models/signal-strength.model';
+import { CopyService } from '../../core/services/copy.service';
 
 @Component({
   selector: 'app-assessment-justification',
@@ -30,17 +27,21 @@ import { SignalStrength } from '../../shared/models/signal-strength.model';
   styleUrl: './assessment-justification.component.scss',
 })
 export class AssessmentJustificationComponent {
+  private copyService = inject(CopyService);
+
   @Input() aiCapabilities: string[] = [];
   @Input() aiLimitations: string[] = [];
   @Input() signalStrength: SignalStrength = 'moderate';
   @Output() continue = new EventEmitter<void>();
 
-  readonly copy = ASSESSMENT_JUSTIFICATION_COPY;
+  get copy() {
+    return this.copyService.assessmentJustificationCopy;
+  }
 
   isSignalInfoExpanded = false;
 
   get signalStrengthExplanation(): string {
-    return getSignalStrengthExplanation(this.signalStrength);
+    return this.copyService.getSignalStrengthExplanation(this.signalStrength);
   }
 
   toggleSignalInfo(): void {
