@@ -539,5 +539,64 @@
       "affectedTasks": "Affected tasks:"
     },
     "disclaimer": "This is a simulation based on industry patterns"
+  },
+  "uncloneable": {
+    "loading": "Analyzing your human signature...",
+    "tagline": "In a world of AI copies, prove you're the original",
+    "dayStreak": "day streak",
+    "yourSignature": "Your Signature",
+    "score": "SCORE",
+    "fromLastWeek": "from last week",
+    "topPercent": "Top {{percent}}% of humans",
+    "aiCantReplace": "What AI Can't Replace About You",
+    "tasksOnlyYou": "Tasks only you can do",
+    "uniqueDecisions": "Unique decisions made",
+    "realRelationships": "Real relationships",
+    "creativeSolutions": "Creative solutions",
+    "logMoment": "Log Moment",
+    "tabs": {
+      "overview": "Overview",
+      "dimensions": "Dimensions",
+      "moments": "Moments",
+      "growth": "Growth"
+    },
+    "insights": {
+      "title": "Insights"
+    },
+    "traits": {
+      "title": "Your Uncloneable Traits",
+      "aiCantCopy": "AI can't copy"
+    },
+    "challenge": {
+      "title": "Weekly Challenge",
+      "completed": "Completed",
+      "markComplete": "Mark as Complete"
+    },
+    "dimensions": {
+      "topPercent": "Top {{percent}}%",
+      "strength": "Strength",
+      "opportunity": "Growth opportunity"
+    },
+    "moments": {
+      "title": "Human Moments",
+      "add": "Add Moment",
+      "intro": "Every moment you demonstrate irreplaceable human qualities strengthens your signature.",
+      "empty": "No moments logged yet. Start capturing what makes you uniquely human.",
+      "addTitle": "Log a Human Moment",
+      "save": "Save Moment",
+      "form": {
+        "title": "What happened?",
+        "titlePlaceholder": "Describe the moment briefly...",
+        "description": "Tell the story",
+        "descPlaceholder": "What made this moment uniquely human?",
+        "dimension": "Which dimension?",
+        "type": "Type of moment"
+      }
+    },
+    "growth": {
+      "title": "Growth Path",
+      "estimatedImpact": "Estimated impact",
+      "points": "points"
+    }
   }
 }

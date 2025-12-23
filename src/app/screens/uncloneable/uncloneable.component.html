@@ -1,0 +1,400 @@
+<!--
+Copyright 2025 TASKEXPOSURE
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="uncloneable">
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="uncloneable__loading">
+      <div class="loading-orb"></div>
+      <p>{{ 'uncloneable.loading' | translate }}</p>
+    </div>
+  } @else if (profile()) {
+    <!-- Header -->
+    <header class="uncloneable__header">
+      <div class="uncloneable__brand">
+        <h1 class="uncloneable__title">UNCLONEABLE</h1>
+        <p class="uncloneable__tagline">{{ 'uncloneable.tagline' | translate }}</p>
+      </div>
+      <div class="uncloneable__streak" *ngIf="profile()!.streakDays > 0">
+        <span class="streak-icon">🔥</span>
+        <span class="streak-count">{{ profile()!.streakDays }}</span>
+        <span class="streak-label">{{ 'uncloneable.dayStreak' | translate }}</span>
+      </div>
+    </header>
+
+    <!-- Hero Section: Signature + Score -->
+    <section class="uncloneable__hero">
+      <div class="hero-signature">
+        <app-human-signature
+          [signature]="profile()!.signature"
+          [size]="220"
+          [animate]="true"
+          [label]="'uncloneable.yourSignature' | translate"
+        ></app-human-signature>
+      </div>
+
+      <div class="hero-score">
+        <div class="score-ring" [style.--tier-color]="getTier(profile()!.overallScore).color">
+          <span class="score-value">{{ profile()!.overallScore }}</span>
+          <span class="score-label">{{ 'uncloneable.score' | translate }}</span>
+        </div>
+        <div class="score-tier" [style.color]="getTier(profile()!.overallScore).color">
+          <span class="tier-icon">{{ getTier(profile()!.overallScore).icon }}</span>
+          <span class="tier-label">{{ getTier(profile()!.overallScore).label }}</span>
+        </div>
+        <div class="score-delta" [class.score-delta--up]="getScoreDelta() > 0" [class.score-delta--down]="getScoreDelta() < 0">
+          @if (getScoreDelta() !== 0) {
+            <span class="delta-arrow">{{ getScoreDelta() > 0 ? '↑' : '↓' }}</span>
+            <span class="delta-value">{{ getScoreDelta() > 0 ? '+' : '' }}{{ getScoreDelta() }}</span>
+            <span class="delta-label">{{ 'uncloneable.fromLastWeek' | translate }}</span>
+          }
+        </div>
+        <p class="score-description">{{ getTier(profile()!.overallScore).description }}</p>
+        <p class="score-percentile">{{ 'uncloneable.topPercent' | translate : { percent: 100 - profile()!.percentileRank } }}</p>
+      </div>
+    </section>
+
+    <!-- AI Comparison Stats -->
+    <section class="uncloneable__ai-compare glass-card">
+      <h3 class="section-title">{{ 'uncloneable.aiCantReplace' | translate }}</h3>
+      <div class="ai-stats">
+        <div class="ai-stat">
+          <span class="ai-stat__value">{{ profile()!.aiComparisonMetrics.tasksOnlyYouCanDo }}</span>
+          <span class="ai-stat__label">{{ 'uncloneable.tasksOnlyYou' | translate }}</span>
+        </div>
+        <div class="ai-stat">
+          <span class="ai-stat__value">{{ profile()!.aiComparisonMetrics.uniqueDecisionsMade }}</span>
+          <span class="ai-stat__label">{{ 'uncloneable.uniqueDecisions' | translate }}</span>
+        </div>
+        <div class="ai-stat">
+          <span class="ai-stat__value">{{ profile()!.aiComparisonMetrics.relationshipsAiCantReplace }}</span>
+          <span class="ai-stat__label">{{ 'uncloneable.realRelationships' | translate }}</span>
+        </div>
+        <div class="ai-stat">
+          <span class="ai-stat__value">{{ profile()!.aiComparisonMetrics.creativeSolutionsGenerated }}</span>
+          <span class="ai-stat__label">{{ 'uncloneable.creativeSolutions' | translate }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="uncloneable__tabs">
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'overview'"
+        (click)="setTab('overview')"
+      >
+        {{ 'uncloneable.tabs.overview' | translate }}
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'dimensions'"
+        (click)="setTab('dimensions')"
+      >
+        {{ 'uncloneable.tabs.dimensions' | translate }}
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'moments'"
+        (click)="setTab('moments')"
+      >
+        {{ 'uncloneable.tabs.moments' | translate }}
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'growth'"
+        (click)="setTab('growth')"
+      >
+        {{ 'uncloneable.tabs.growth' | translate }}
+      </button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="uncloneable__content">
+      <!-- Overview Tab -->
+      @if (activeTab() === 'overview') {
+        <!-- Insights -->
+        <section class="content-section">
+          <h3 class="section-title">{{ 'uncloneable.insights.title' | translate }}</h3>
+          <div class="insights-grid">
+            @for (insight of profile()!.insights; track insight.id) {
+              <div class="insight-card glass-card" [class]="'insight-card--' + insight.type">
+                <span class="insight-icon">{{ getInsightIcon(insight.type) }}</span>
+                <div class="insight-content">
+                  <h4 class="insight-title">{{ insight.title }}</h4>
+                  <p class="insight-desc">{{ insight.description }}</p>
+                  @if (insight.actionable && insight.action) {
+                    <button type="button" class="insight-action">{{ insight.action }}</button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- Top Traits -->
+        <section class="content-section">
+          <h3 class="section-title">{{ 'uncloneable.traits.title' | translate }}</h3>
+          <div class="traits-grid">
+            @for (trait of profile()!.topTraits; track trait.id) {
+              <div class="trait-card glass-card" [ngClass]="getRarityClass(trait.rarity)">
+                <div class="trait-header">
+                  <span class="trait-icon">{{ trait.icon }}</span>
+                  <span class="trait-rarity">{{ trait.rarity }}</span>
+                </div>
+                <h4 class="trait-name">{{ trait.name }}</h4>
+                <p class="trait-desc">{{ trait.description }}</p>
+                <div class="trait-meter">
+                  <span class="trait-meter-label">{{ 'uncloneable.traits.aiCantCopy' | translate }}</span>
+                  <div class="trait-meter-bar">
+                    <div class="trait-meter-fill" [style.width.%]="100 - trait.aiReplicability"></div>
+                  </div>
+                  <span class="trait-meter-value">{{ 100 - trait.aiReplicability }}%</span>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- Weekly Challenge -->
+        <section class="content-section">
+          <h3 class="section-title">{{ 'uncloneable.challenge.title' | translate }}</h3>
+          <div class="challenge-card glass-card">
+            <div class="challenge-header">
+              <span class="challenge-badge" [class]="'challenge-badge--' + profile()!.weeklyChallenge.difficulty">
+                {{ profile()!.weeklyChallenge.difficulty }}
+              </span>
+              <span class="challenge-reward">+{{ profile()!.weeklyChallenge.rewardPoints }} pts</span>
+            </div>
+            <h4 class="challenge-title">{{ profile()!.weeklyChallenge.title }}</h4>
+            <p class="challenge-desc">{{ profile()!.weeklyChallenge.description }}</p>
+            <div class="challenge-dimension">
+              <span [style.color]="getDimensionColor(profile()!.weeklyChallenge.dimension)">
+                {{ dimensions[profile()!.weeklyChallenge.dimension].icon }}
+                {{ dimensions[profile()!.weeklyChallenge.dimension].label }}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="challenge-btn"
+              [disabled]="profile()!.weeklyChallenge.completed"
+              (click)="completeChallenge()"
+            >
+              @if (profile()!.weeklyChallenge.completed) {
+                ✓ {{ 'uncloneable.challenge.completed' | translate }}
+              } @else {
+                {{ 'uncloneable.challenge.markComplete' | translate }}
+              }
+            </button>
+          </div>
+        </section>
+      }
+
+      <!-- Dimensions Tab -->
+      @if (activeTab() === 'dimensions') {
+        <section class="content-section">
+          <div class="dimensions-grid">
+            @for (dim of profile()!.dimensions; track dim.dimension) {
+              <div class="dimension-card glass-card">
+                <div class="dimension-header">
+                  <span class="dimension-icon" [style.color]="getDimensionColor(dim.dimension)">
+                    {{ dimensions[dim.dimension].icon }}
+                  </span>
+                  <span class="dimension-name">{{ dimensions[dim.dimension].label }}</span>
+                  <span class="dimension-trend" [class]="'dimension-trend--' + dim.trend">
+                    {{ dim.trend === 'rising' ? '↑' : dim.trend === 'declining' ? '↓' : '→' }}
+                  </span>
+                </div>
+                <div class="dimension-score">
+                  <span class="dimension-value" [style.color]="getDimensionColor(dim.dimension)">{{ dim.score }}</span>
+                  <span class="dimension-percentile">{{ 'uncloneable.dimensions.topPercent' | translate : { percent: 100 - dim.percentile } }}</span>
+                </div>
+                <div class="dimension-bar">
+                  <div class="dimension-bar-fill" [style.width.%]="dim.score" [style.background]="getDimensionColor(dim.dimension)"></div>
+                </div>
+                <p class="dimension-ai-weakness">{{ dimensions[dim.dimension].aiWeakness }}</p>
+                <div class="dimension-details">
+                  <div class="dimension-strength">
+                    <strong>{{ 'uncloneable.dimensions.strength' | translate }}:</strong>
+                    {{ dim.keyStrength }}
+                  </div>
+                  <div class="dimension-opportunity">
+                    <strong>{{ 'uncloneable.dimensions.opportunity' | translate }}:</strong>
+                    {{ dim.growthOpportunity }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Moments Tab -->
+      @if (activeTab() === 'moments') {
+        <section class="content-section">
+          <div class="moments-header">
+            <h3 class="section-title">{{ 'uncloneable.moments.title' | translate }}</h3>
+            <button type="button" class="add-moment-btn" (click)="openMomentModal()">
+              + {{ 'uncloneable.moments.add' | translate }}
+            </button>
+          </div>
+          <p class="moments-intro">{{ 'uncloneable.moments.intro' | translate }}</p>
+
+          <div class="moments-list">
+            @for (moment of profile()!.recentMoments; track moment.id) {
+              <div class="moment-card glass-card">
+                <div class="moment-header">
+                  <span class="moment-dimension" [style.color]="getDimensionColor(moment.dimension)">
+                    {{ dimensions[moment.dimension].icon }}
+                  </span>
+                  <span class="moment-date">{{ formatDate(moment.date) }}</span>
+                  <span class="moment-impact">+{{ moment.impactScore }} pts</span>
+                </div>
+                <h4 class="moment-title">{{ moment.title }}</h4>
+                <p class="moment-desc">{{ moment.description }}</p>
+                <span class="moment-type">{{ moment.type }}</span>
+              </div>
+            }
+          </div>
+
+          @if (profile()!.recentMoments.length === 0) {
+            <div class="empty-state">
+              <span class="empty-icon">📝</span>
+              <p>{{ 'uncloneable.moments.empty' | translate }}</p>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Growth Tab -->
+      @if (activeTab() === 'growth') {
+        <section class="content-section">
+          <h3 class="section-title">{{ 'uncloneable.growth.title' | translate }}</h3>
+
+          <div class="growth-path glass-card">
+            <div class="growth-header">
+              <h4 class="growth-name">{{ profile()!.activePath.name }}</h4>
+              <span class="growth-dimension" [style.color]="getDimensionColor(profile()!.activePath.targetDimension)">
+                {{ dimensions[profile()!.activePath.targetDimension].icon }}
+                {{ dimensions[profile()!.activePath.targetDimension].label }}
+              </span>
+            </div>
+            <p class="growth-desc">{{ profile()!.activePath.description }}</p>
+
+            <div class="growth-progress">
+              <div class="growth-bar">
+                <div class="growth-bar-fill" [style.width.%]="profile()!.activePath.progress"></div>
+              </div>
+              <span class="growth-percent">{{ profile()!.activePath.progress }}%</span>
+            </div>
+
+            <div class="growth-steps">
+              @for (step of profile()!.activePath.steps; track step.id) {
+                <div class="growth-step" [class.growth-step--completed]="step.completed" [class.growth-step--locked]="step.unlocksAt && profile()!.overallScore < step.unlocksAt">
+                  <span class="step-check">{{ step.completed ? '✓' : step.unlocksAt ? '🔒' : '○' }}</span>
+                  <span class="step-title">{{ step.title }}</span>
+                  @if (step.unlocksAt && profile()!.overallScore < step.unlocksAt) {
+                    <span class="step-unlock">Unlocks at {{ step.unlocksAt }}</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="growth-impact">
+              <span class="impact-label">{{ 'uncloneable.growth.estimatedImpact' | translate }}:</span>
+              <span class="impact-value">+{{ profile()!.activePath.estimatedImpact }} {{ 'uncloneable.growth.points' | translate }}</span>
+            </div>
+          </div>
+        </section>
+      }
+    </div>
+
+    <!-- Floating Action Button -->
+    <button type="button" class="fab" (click)="openMomentModal()">
+      <span class="fab-icon">+</span>
+      <span class="fab-label">{{ 'uncloneable.logMoment' | translate }}</span>
+    </button>
+  }
+</div>
+
+<!-- Add Moment Modal -->
+@if (showMomentModal()) {
+  <div class="modal-overlay" (click)="closeMomentModal()">
+    <div class="modal glass-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ 'uncloneable.moments.addTitle' | translate }}</h3>
+        <button type="button" class="modal-close" (click)="closeMomentModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>{{ 'uncloneable.moments.form.title' | translate }}</label>
+          <input
+            type="text"
+            class="form-input"
+            [(ngModel)]="newMoment.title"
+            placeholder="{{ 'uncloneable.moments.form.titlePlaceholder' | translate }}"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'uncloneable.moments.form.description' | translate }}</label>
+          <textarea
+            class="form-textarea"
+            [(ngModel)]="newMoment.description"
+            placeholder="{{ 'uncloneable.moments.form.descPlaceholder' | translate }}"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'uncloneable.moments.form.dimension' | translate }}</label>
+          <select class="form-select" [(ngModel)]="newMoment.dimension">
+            @for (dim of ['judgment', 'trust', 'creativity', 'empathy', 'accountability', 'presence']; track dim) {
+              <option [value]="dim">
+                {{ getDimensionInfo(dim).icon }} {{ getDimensionInfo(dim).label }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'uncloneable.moments.form.type' | translate }}</label>
+          <select class="form-select" [(ngModel)]="newMoment.type">
+            <option value="decision">Decision</option>
+            <option value="relationship">Relationship</option>
+            <option value="creation">Creation</option>
+            <option value="challenge">Challenge</option>
+            <option value="growth">Growth</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn--ghost" (click)="closeMomentModal()">
+          {{ 'common.close' | translate }}
+        </button>
+        <button type="button" class="btn btn--primary" (click)="saveMoment()" [disabled]="!newMoment.title.trim()">
+          {{ 'uncloneable.moments.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

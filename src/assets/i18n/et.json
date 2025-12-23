@@ -539,5 +539,64 @@
       "affectedTasks": "Mõjutatud ülesanded:"
     },
     "disclaimer": "See on simulatsioon, mis põhineb valdkonna mustritel"
+  },
+  "uncloneable": {
+    "loading": "Analüüsin sinu inimlikku signatuuri...",
+    "tagline": "Maailmas täis AI koopiaid, tõesta et oled originaal",
+    "dayStreak": "päeva järjest",
+    "yourSignature": "Sinu Signatuur",
+    "score": "SKOOR",
+    "fromLastWeek": "võrreldes eelmise nädalaga",
+    "topPercent": "Top {{percent}}% inimestest",
+    "aiCantReplace": "Mida AI ei saa sinu juures asendada",
+    "tasksOnlyYou": "Ülesanded, mida ainult sina saad teha",
+    "uniqueDecisions": "Unikaalsed otsused",
+    "realRelationships": "Päris suhted",
+    "creativeSolutions": "Loovad lahendused",
+    "logMoment": "Lisa hetk",
+    "tabs": {
+      "overview": "Ülevaade",
+      "dimensions": "Dimensioonid",
+      "moments": "Hetked",
+      "growth": "Areng"
+    },
+    "insights": {
+      "title": "Taipamised"
+    },
+    "traits": {
+      "title": "Sinu asendamatud omadused",
+      "aiCantCopy": "AI ei suuda kopeerida"
+    },
+    "challenge": {
+      "title": "Nädala väljakutse",
+      "completed": "Tehtud",
+      "markComplete": "Märgi tehtuks"
+    },
+    "dimensions": {
+      "topPercent": "Top {{percent}}%",
+      "strength": "Tugevus",
+      "opportunity": "Kasvuvõimalus"
+    },
+    "moments": {
+      "title": "Inimlikud hetked",
+      "add": "Lisa hetk",
+      "intro": "Iga hetk, kus demonstreerid asendamatuid inimlikke omadusi, tugevdab sinu signatuuri.",
+      "empty": "Hetki pole veel lisatud. Alusta jäädvustamist, mis teeb sind ainulaadselt inimlikuks.",
+      "addTitle": "Lisa inimlik hetk",
+      "save": "Salvesta hetk",
+      "form": {
+        "title": "Mis juhtus?",
+        "titlePlaceholder": "Kirjelda hetke lühidalt...",
+        "description": "Räägi lugu",
+        "descPlaceholder": "Mis tegi sellest hetkest ainulaadselt inimliku?",
+        "dimension": "Milline dimensioon?",
+        "type": "Hetke tüüp"
+      }
+    },
+    "growth": {
+      "title": "Arengurada",
+      "estimatedImpact": "Eeldatav mõju",
+      "points": "punkti"
+    }
   }
 }

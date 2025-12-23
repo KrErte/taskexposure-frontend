@@ -51,6 +51,7 @@ export class SidebarComponent {
 
   toolItems: NavItem[] = [
     { id: 'evidence-log', label: 'Evidence Log', icon: 'note_add' },
+    { id: 'uncloneable', label: 'Uncloneable', icon: 'fingerprint' },
   ];
 
   onNavigate(id: string): void {
